@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Add Supplier
+    Easy Inventory | Edit Supplier
 @endsection
 
 @section('admin')
@@ -15,30 +15,30 @@
 
                     <div class="card-body">
 
-                        <h4 class="card-title">Add Supplier</h4>
+                        <h4 class="card-title">Edit Supplier</h4>
                         <br />
 
-                        <form method="post" action="{{ route('store.supplier') }}" id="suppplierAddForm">
+                        <form method="post" action="{{ route('update.supplier') }}" id="suppplierEditForm">
                             @csrf
 
                             <div class="row mb-3">
                                 <label for="old_password" class="col-sm-2 col-form-label">Name</label>
                                 <div class="form-group col-sm-10">
-                                    <input name="name" class="form-control" type="text" value=""  >
+                                    <input name="name" class="form-control" type="text" value="{{ $data->name }}"  >
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="old_password" class="col-sm-2 col-form-label">Phone</label>
                                 <div class="form-group col-sm-10">
-                                    <input name="phone" class="form-control" type="text" value=""  >
+                                    <input name="phone" class="form-control" type="text" value="{{ $data->phone }}"  >
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="old_password" class="col-sm-2 col-form-label">Email</label>
                                 <div class="form-group col-sm-10">
-                                    <input name="email" class="form-control" type="email" value=""  >
+                                    <input name="email" class="form-control" type="email" value="{{ $data->email }}"  >
                                 </div>
                             </div>
 
@@ -51,8 +51,9 @@
                             </div>
                             -->
 
-                            <input type="submit" class="btn btn-primary waves-effect waves-light" value="Save">
+                            <input type="submit" class="btn btn-primary waves-effect waves-light" value="Update">
 
+                            <input type="hidden" name="id" value="{{ $data->id }}" />
                         </form>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
     //jQuery(document).ready(function(){
     window.onload = (function(){
 
-        jQuery("form#suppplierAddForm").validate({
+        jQuery("form#suppplierEditForm").validate({
             rules : {
                 name : {required : true},
                 phone : {required : true},

@@ -12,7 +12,7 @@
                             <li class="menu-title">Menu</li>
 
                             <li>
-                                <a href="index.html" class="waves-effect">
+                                <a href="{{ route('dashboard') }}" class="waves-effect">
                                     <i class="ri-dashboard-line"></i>
                                     <span>Dashboard</span>
                                 </a>
@@ -20,12 +20,23 @@
 
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="ri-mail-send-line"></i>
+                                    <i class="ri-play-list-add-line "></i>
                                     <span>Manage Suppliers</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('suppliers.all') }}">View All</a></li>
-                                    <li><a href="{{ route('suppliers.add') }}">Add New</a></li>
+                                    <li><a href="{{ route('supplier.add') }}">Add New</a></li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="ri-play-list-add-line "></i>
+                                    <span>Manage Customers</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('customers.all') }}">View All</a></li>
+                                    <li><a href="{{ route('customer.add') }}">Add New</a></li>
                                 </ul>
                             </li>
 

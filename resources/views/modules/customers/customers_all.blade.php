@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Suppliers - All
+    Customers - All
 @endsection
 
 @section('admin')
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Suppliers - All</h4>
+                    <h4 class="mb-sm-0">Customers - All</h4>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('supplier.add') }}">
+                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('customer.add') }}">
                             <i class="fa fa-plus-square"></i>&nbsp;Add New
                         </a>
 
@@ -40,28 +40,44 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Supplier Name</th>
+                                <th>Customer Name</th>
+                                <th>Customer Image</th>
                                 <th>Phone</th>
                                 <th>Email</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
 
                             <tbody>
 
-                                @foreach($data as $item)
+                                @foreach($data as $row)
 
                                     <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->email }}</td>
+                                        <td>{{ $row->id }}</td>
+                                        <td>{{ $row->name }}</td>
                                         <td>
-                                            <a href="{{ route('supplier.edit', $item->id) }}" class="btn btn-primary sm" title="Edit">
+
+                                            @if(!empty($row->image))
+                                                <img
+                                                    src="{{ (!empty($row->image)) ? asset($row->image) : asset('upload/no_image.jpg')}}"
+                                                    style="width: 60px; height: 60px;"
+                                                    />
+
+                                            @else
+                                                [None]
+                                            @endif
+
+                                        </td>
+                                        <td>{{ $row->phone }}</td>
+                                        <td>{{ $row->email }}</td>
+                                        <td>{{ $row['status']['status'] }}</td>
+                                        <td>
+                                            <a href="{{ route('customer.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <a href="{{ route('supplier.delete', $item->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <a href="{{ route('customer.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                         </td>
