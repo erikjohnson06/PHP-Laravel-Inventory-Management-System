@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Customers - All
+    Easy Inventory | Customers
 @endsection
 
 @section('admin')

@@ -5,3 +5,11 @@ table.dataTable th {
 table.dataTable td {
     text-align: center;
 }
+
+table.dataTable tr.inactive {
+    background-color: #f8d7da;
+}
+
+table.dataTable tr.onHold {
+    background-color: #fff3cd;
+}

@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PoS\SupplierController;
+use App\Http\Controllers\PoS\CategoryController;
 use App\Http\Controllers\PoS\CustomerController;
+use App\Http\Controllers\PoS\ProductController;
+use App\Http\Controllers\PoS\SupplierController;
+use App\Http\Controllers\PoS\UnitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +41,7 @@ Route::middleware(['auth'])->group(function(){
     Route::controller(SupplierController::class)->group(function () {
         Route::get('/suppliers/all', 'viewSuppliersAll')->name('suppliers.all');
         Route::get('/supplier/add', 'viewAddSupplier')->name('supplier.add');
-        Route::get('/supplier/edit/{id}', 'editSupplier')->name('supplier.edit');
+        Route::get('/supplier/edit/{id}', 'viewEditSupplier')->name('supplier.edit');
         Route::get('/supplier/delete/{id}', 'deleteSupplier')->name('supplier.delete');
         Route::post('/supplier/store', 'addSupplier')->name('store.supplier');
         Route::post('/supplier/update', 'updateSupplier')->name('update.supplier');
@@ -51,6 +54,33 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/customer/delete/{id}', 'deleteCustomer')->name('customer.delete');
         Route::post('/customer/store', 'addCustomer')->name('store.customer');
         Route::post('/customer/update', 'updateCustomer')->name('update.customer');
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products/all', 'viewProductsAll')->name('products.all');
+        Route::get('/product/add', 'viewAddProduct')->name('product.add');
+        Route::get('/product/edit/{id}', 'viewEditProduct')->name('product.edit');
+        Route::get('/product/delete/{id}', 'deleteProduct')->name('product.delete');
+        Route::post('/product/store', 'addProduct')->name('store.product');
+        Route::post('/product/update', 'updateProduct')->name('update.product');
+    });
+
+    Route::controller(UnitController::class)->group(function () {
+        Route::get('/units/all', 'viewUnitsAll')->name('units.all');
+        Route::get('/unit/add', 'viewAddUnit')->name('unit.add');
+        Route::get('/unit/edit/{id}', 'viewEditUnit')->name('unit.edit');
+        Route::get('/unit/delete/{id}', 'deleteUnit')->name('unit.delete');
+        Route::post('/unit/store', 'addUnit')->name('store.unit');
+        Route::post('/unit/update', 'updateUnit')->name('update.unit');
+    });
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories/all', 'viewCategoriesAll')->name('categories.all');
+        Route::get('/category/add', 'viewAddCategory')->name('category.add');
+        Route::get('/category/edit/{id}', 'viewEditCategory')->name('category.edit');
+        Route::get('/category/delete/{id}', 'deleteCategory')->name('category.delete');
+        Route::post('/category/store', 'addCategory')->name('store.category');
+        Route::post('/category/update', 'updateCategory')->name('update.category');
     });
 });
 

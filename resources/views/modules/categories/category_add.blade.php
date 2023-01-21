@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Add Supplier
+    Easy Inventory | Add Category
 @endsection
 
 @section('admin')
@@ -18,36 +18,22 @@
                         <div class="row mb-3">
 
                             <div class="col-sm-10">
-                                <h4 class="card-title">Add Supplier</h4>
+                                <h4 class="card-title">Add Category</h4>
                             </div>
                             <div class="col-sm-2">
-                                <a class="waves-effect waves-light float-end" href="{{ route('suppliers.all') }}">
+                                <a class="waves-effect waves-light float-end" href="{{ route('categories.all') }}">
                                     <i class="ri-arrow-left-s-line "></i>&nbsp;Back
                                 </a>
                             </div>
                         </div>
 
-                        <form method="post" action="{{ route('store.supplier') }}" id="suppplierAddForm">
+                        <form method="post" action="{{ route('store.category') }}" id="categoryAddForm">
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                <label for="name" class="col-sm-2 col-form-label">Category Name</label>
                                 <div class="form-group col-sm-10">
                                     <input name="name" class="form-control" type="text" value=""  >
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
-                                <div class="form-group col-sm-10">
-                                    <input name="phone" class="form-control" type="text" value=""  >
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                                <div class="form-group col-sm-10">
-                                    <input name="email" class="form-control" type="email" value=""  >
                                 </div>
                             </div>
 
@@ -78,26 +64,14 @@
     //jQuery(document).ready(function(){
     window.onload = (function(){
 
-        jQuery("form#suppplierAddForm").validate({
+        jQuery("form#categoryAddForm").validate({
             rules : {
-                name : {required : true},
-                phone : {required : true},
-                email : {required : true}
-                //address : {required : true}
+                name : {required : true}
             },
             messages : {
                 name : {
-                    required : "Please Enter a Supplier Name"
-                },
-                phone : {
-                    required : "Please Enter a Phone Number for this Supplier"
-                },
-                email : {
-                    required : "Please Enter a Email Address for this Supplier"
+                    required : "Please Enter a Category Name"
                 }
-                //address : {
-                //    required : "Please Enter a Supplier Address"
-                //}
             },
             errorElement : "span",
             errorPlacement : function(error, element){

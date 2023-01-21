@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->renameColumn('status', 'status_id');
+        Schema::create('product_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string("status")->nullable();
         });
     }
 
@@ -25,8 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->renameColumn('status_id', 'status');
-        });
+        Schema::dropIfExists('product_statuses');
     }
 };

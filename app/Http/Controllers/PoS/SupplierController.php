@@ -4,13 +4,13 @@ namespace App\Http\Controllers\PoS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Supplier;
+use App\Models\SupplierStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
 
 class SupplierController extends Controller
 {
@@ -32,7 +32,27 @@ class SupplierController extends Controller
      * @return View
      */
     public function viewAddSupplier() : View {
-        return view("modules.suppliers.supplier_add");
+
+        $statuses = SupplierStatus::orderBy("id", "ASC")->get();
+
+        return view("modules.suppliers.supplier_add",[
+            "statuses" => $statuses
+        ]);
+    }
+
+    /**
+     * @param int $id
+     * @return View
+     */
+    public function viewEditSupplier(int $id) : View {
+
+        $data = Supplier::findOrFail($id);
+        $statuses = SupplierStatus::orderBy("id", "ASC")->get();
+
+        return view("modules.suppliers.supplier_edit", [
+            "data" => $data,
+            "statuses" => $statuses
+        ]);
     }
 
     /**
@@ -55,7 +75,7 @@ class SupplierController extends Controller
             "name" => $request->name,
             "phone" => $request->phone,
             "email" => $request->email,
-            "status" => 1,
+            "status_id" => $request->status_id,
             "created_by" => Auth::user()->id,
             "created_at" => Carbon::now()
         ]);
@@ -66,19 +86,6 @@ class SupplierController extends Controller
         ];
 
         return redirect()->route("suppliers.all")->with($notifications);
-    }
-
-    /**
-     * @param int $id
-     * @return View
-     */
-    public function editSupplier(int $id) : View {
-
-        $data = Supplier::findOrFail($id);
-
-        return view("modules.suppliers.supplier_edit", [
-            "data" => $data
-        ]);
     }
 
     /**
@@ -103,6 +110,7 @@ class SupplierController extends Controller
             "name" => $request->name,
             "phone" => $request->phone,
             "email" => $request->email,
+            "status_id" => $request->status_id,
             "updated_by" => Auth::user()->id,
             "updated_at" => Carbon::now()
         ]);

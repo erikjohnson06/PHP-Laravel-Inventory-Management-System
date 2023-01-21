@@ -15,41 +15,52 @@
 
                     <div class="card-body">
 
-                        <h4 class="card-title">Edit Supplier</h4>
-                        <br />
+                        <div class="row mb-3">
+
+                            <div class="col-sm-10">
+                                <h4 class="card-title">Edit Supplier</h4>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="waves-effect waves-light float-end" href="{{ route('suppliers.all') }}">
+                                    <i class="ri-arrow-left-s-line "></i>&nbsp;Back
+                                </a>
+                            </div>
+                        </div>
 
                         <form method="post" action="{{ route('update.supplier') }}" id="suppplierEditForm">
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="old_password" class="col-sm-2 col-form-label">Name</label>
+                                <label for="name" class="col-sm-2 col-form-label">Name</label>
                                 <div class="form-group col-sm-10">
                                     <input name="name" class="form-control" type="text" value="{{ $data->name }}"  >
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="old_password" class="col-sm-2 col-form-label">Phone</label>
+                                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                                 <div class="form-group col-sm-10">
                                     <input name="phone" class="form-control" type="text" value="{{ $data->phone }}"  >
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="old_password" class="col-sm-2 col-form-label">Email</label>
+                                <label for="email" class="col-sm-2 col-form-label">Email</label>
                                 <div class="form-group col-sm-10">
                                     <input name="email" class="form-control" type="email" value="{{ $data->email }}"  >
                                 </div>
                             </div>
 
-                            <!--
                             <div class="row mb-3">
-                                <label for="old_password" class="col-sm-2 col-form-label">Address</label>
-                                <div class="form-group col-sm-10">
-                                    <input name="address" class="form-control" type="address" value=""  >
+                                <label for="status_id" class="col-sm-2 col-form-label">Status</label>
+                                <div class="col-sm-10">
+                                    <select name="status_id" class="form-select" aria-label="Status">
+                                        @foreach($statuses as $option)
+                                            <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                            -->
 
                             <input type="submit" class="btn btn-primary waves-effect waves-light" value="Update">
 
