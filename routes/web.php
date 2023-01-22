@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PoS\CategoryController;
 use App\Http\Controllers\PoS\CustomerController;
+use App\Http\Controllers\PoS\JSController;
 use App\Http\Controllers\PoS\ProductController;
+use App\Http\Controllers\PoS\PurchaseOrderController;
 use App\Http\Controllers\PoS\SupplierController;
 use App\Http\Controllers\PoS\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +83,20 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/category/delete/{id}', 'deleteCategory')->name('category.delete');
         Route::post('/category/store', 'addCategory')->name('store.category');
         Route::post('/category/update', 'updateCategory')->name('update.category');
+    });
+
+    Route::controller(PurchaseOrderController::class)->group(function () {
+        Route::get('/purchaseorders/all', 'viewPurchaseOrdersAll')->name('purchaseorders.all');
+        Route::get('/purchaseorder/create', 'viewAddPurchaseOrder')->name('purchaseorder.add');
+//        Route::get('/purchaseorder/edit/{id}', 'viewEditPurchaseOrder')->name('purchaseorder.edit');
+//        Route::get('/purchaseorder/delete/{id}', 'deletePurchaseOrder')->name('purchaseorder.delete');
+        Route::post('/purchaseorder/store', 'createPurchaseOrder')->name('store.purchaseorder');
+//        Route::post('/purchaseorder/update', 'updatePurchaseOrder')->name('update.purchaseorder');
+
+    });
+
+    Route::controller(JSController::class)->group(function () {
+        Route::get('/get-categories', 'getCategoriesBySupplierId')->name('get-categories');
     });
 });
 
