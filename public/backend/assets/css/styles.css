@@ -1,9 +1,23 @@
+/** Table / DataTable styling **/
+table th,
 table.dataTable th {
     text-align: center;
 }
 
 table.dataTable td {
     text-align: center;
+}
+
+table.dataTable th,
+table.dataTable td {
+    max-width: 200px;
+    overflow-wrap: break-word;
+}
+
+table.dataTable td.overflow-text {
+    max-width: 200px;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 table.dataTable tr.inactive {
@@ -13,3 +27,42 @@ table.dataTable tr.inactive {
 table.dataTable tr.onHold {
     background-color: #fff3cd;
 }
+
+table td.align-left {
+    text-align: left;
+}
+
+table td.align-right {
+    text-align: right;
+}
+
+table td.align-center {
+    text-align: center;
+}
+
+/** Adjust height of Select2 boxes **/
+.select2-selection__rendered {
+    line-height: 31px !important;
+}
+.select2-container .select2-selection--single {
+    height: 35px !important;
+}
+.select2-selection__arrow {
+    height: 34px !important;
+}
+
+.readonly {
+    background-color: #ddd;
+}
+
+/*
+.dt-body-nowrap {
+   overflow-wrap: break-word;
+}
+
+table td.overflow-text {
+    max-width: 200px;
+
+    overflow-wrap: break-word;
+
+}*/

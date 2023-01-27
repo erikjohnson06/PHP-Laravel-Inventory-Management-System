@@ -48,12 +48,15 @@
     </div>
 </div>
 
+@endsection
+
+@section('javascript')
+
 <script type="text/javascript">
 
-    //jQuery(document).ready(function(){
-    window.onload = (function(){
+    $(document).ready(function(){
 
-        jQuery("form#unitAddForm").validate({
+        $("form#unitAddForm").validate({
             rules : {
                 name : {required : true}
             },
@@ -68,10 +71,10 @@
                 element.closest(".form-group").append(error);
             },
             highlight : function(element, errorClass, validClass){
-                jQuery(element).addClass("is-invalid");
+                $(element).addClass("is-invalid");
             },
             unhighlight : function(element, errorClass, validClass){
-                jQuery(element).removeClass("is-invalid");
+                $(element).removeClass("is-invalid");
             }
         });
     });

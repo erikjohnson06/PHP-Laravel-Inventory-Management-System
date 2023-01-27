@@ -1,9 +1,13 @@
 jQuery(document).ready(function () {
     jQuery("#datatable").DataTable(
-            {language: {
-                    paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
+            {
+                language: {
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"}
+                },
                 drawCallback: function () {
-                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded");
                 }});
 
     var a = jQuery("#datatable-buttons").DataTable(
@@ -11,7 +15,7 @@ jQuery(document).ready(function () {
                 language: {
                     paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
                 drawCallback: function () {
-                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded");
                 },
                 buttons: ["copy", "excel", "pdf", "colvis"]});
 
@@ -22,14 +26,14 @@ jQuery(document).ready(function () {
         language: {
             paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
         drawCallback: function () {
-            jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+            jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded");
         }}),
             jQuery("#key-datatable").DataTable(
             {keys: !0,
                 language: {
                     paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
                 drawCallback: function () {
-                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded");
                 }}),
             //a.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)"),
             jQuery(".dataTables_length select").addClass("form-select form-select-sm"),
@@ -44,14 +48,14 @@ jQuery(document).ready(function () {
                 language: {
                     paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
                 drawCallback: function () {
-                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded");
                 }}),
             jQuery("#complex-header-datatable").DataTable(
             {language: {
                     paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
                 drawCallback: function () {
                     jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                            jQuery(".dataTables_length select").addClass("form-select form-select-sm")
+                            jQuery(".dataTables_length select").addClass("form-select form-select-sm");
                 },
                 columnDefs: [{visible: !1, targets: -1}]}),
             jQuery("#state-saving-datatable").DataTable({
@@ -60,6 +64,6 @@ jQuery(document).ready(function () {
             paginate: {previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>"}},
         drawCallback: function () {
             jQuery(".dataTables_paginate > .pagination").addClass("pagination-rounded"),
-                    jQuery(".dataTables_length select").addClass("form-select form-select-sm")
-        }})
+                    jQuery(".dataTables_length select").addClass("form-select form-select-sm");
+        }});
 });

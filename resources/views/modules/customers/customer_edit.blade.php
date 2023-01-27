@@ -101,22 +101,25 @@
     </div>
 </div>
 
+@endsection
+
+@section('javascript')
+
 <script type="text/javascript">
 
-    //jQuery(document).ready(function(){
-    window.onload = (function(){
+    $(document).ready(function(){
 
-        jQuery("input#customer-image").change(function(e){
+        $("input#customer-image").change(function(e){
             var reader = new FileReader();
 
             reader.onload = function(e){
-                jQuery('img#customer-image-show').attr("src", e.target.result);
+                $('img#customer-image-show').attr("src", e.target.result);
             };
 
             reader.readAsDataURL(e.target.files['0']);
         });
 
-        jQuery("form#customerAddForm").validate({
+        $("form#customerAddForm").validate({
             rules : {
                 name : {required : true},
                 phone : {required : true},
@@ -147,10 +150,10 @@
                 element.closest(".form-group").append(error);
             },
             highlight : function(element, errorClass, validClass){
-                jQuery(element).addClass("is-invalid");
+                $(element).addClass("is-invalid");
             },
             unhighlight : function(element, errorClass, validClass){
-                jQuery(element).removeClass("is-invalid");
+                $(element).removeClass("is-invalid");
             }
         });
     });

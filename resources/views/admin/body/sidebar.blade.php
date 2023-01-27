@@ -81,6 +81,18 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('purchaseorders.all') }}">View All</a></li>
                                     <li><a href="{{ route('purchaseorder.add') }}">Create New PO</a></li>
+                                    <li><a href="{{ route('purchaseorder.approval') }}">Approve POs</a></li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="ri-play-list-add-line "></i>
+                                    <span>Invoices</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('invoices.all') }}">View All</a></li>
+                                    <li><a href="{{ route('invoice.add') }}">Create New Invoice</a></li>
                                 </ul>
                             </li>
 

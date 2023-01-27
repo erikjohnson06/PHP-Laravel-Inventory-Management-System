@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PoS\CategoryController;
 use App\Http\Controllers\PoS\CustomerController;
+use App\Http\Controllers\PoS\InvoiceController;
 use App\Http\Controllers\PoS\JSController;
 use App\Http\Controllers\PoS\ProductController;
 use App\Http\Controllers\PoS\PurchaseOrderController;
@@ -87,16 +88,24 @@ Route::middleware(['auth'])->group(function(){
 
     Route::controller(PurchaseOrderController::class)->group(function () {
         Route::get('/purchaseorders/all', 'viewPurchaseOrdersAll')->name('purchaseorders.all');
+        Route::get('/purchaseorders/approval', 'viewPurchaseOrdersApproval')->name('purchaseorder.approval');
+        Route::get('/purchaseorders/approve/{id}', 'approvePurchaseOrder')->name('purchaseorder.approve');
         Route::get('/purchaseorder/create', 'viewAddPurchaseOrder')->name('purchaseorder.add');
-//        Route::get('/purchaseorder/edit/{id}', 'viewEditPurchaseOrder')->name('purchaseorder.edit');
-//        Route::get('/purchaseorder/delete/{id}', 'deletePurchaseOrder')->name('purchaseorder.delete');
+        Route::get('/purchaseorder/delete/{id}', 'deletePurchaseOrder')->name('purchaseorder.delete');
+        Route::get('/purchaseorder/cancel/{id}', 'cancelPurchaseOrder')->name('purchaseorder.cancel');
         Route::post('/purchaseorder/store', 'createPurchaseOrder')->name('store.purchaseorder');
-//        Route::post('/purchaseorder/update', 'updatePurchaseOrder')->name('update.purchaseorder');
+    });
 
+    Route::controller(InvoiceController::class)->group(function () {
+        Route::get('/invoices/all', 'viewInvoicesAll')->name('invoices.all');
+        Route::get('/invoice/create', 'viewAddInvoice')->name('invoice.add');
     });
 
     Route::controller(JSController::class)->group(function () {
-        Route::get('/get-categories', 'getCategoriesBySupplierId')->name('get-categories');
+        Route::get('/get-categories-by-supplier', 'getCategoriesBySupplierId')->name('get-categories-by-supplier');
+        Route::get('/get-products-by-supplier-and-category', 'getProductsByCategoriesAndSupplierId')->name('get-products-by-supplier-and-category');
+        Route::get('/get-products-by-category', 'getProductsByCategoryId')->name('get-products-by-category');
+        Route::get('/get-product-available-qty', 'getProductAvailableQty')->name('get-product-available-qty');
     });
 });
 

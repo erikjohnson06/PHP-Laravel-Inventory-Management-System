@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-Easy Inventory | New Purchase Order
+Easy Inventory | New Invoice
 @endsection
 
 @section('css')
@@ -22,7 +22,7 @@ Easy Inventory | New Purchase Order
                         <div class="row mb-3">
 
                             <div class="col-sm-10">
-                                <h4 class="card-title">New Purchase Order</h4>
+                                <h4 class="card-title">New Invoice</h4>
                             </div>
                             <div class="col-sm-2">
                                 <a class="waves-effect waves-light float-end" href="{{ route('purchaseorders.all') }}">
@@ -31,45 +31,36 @@ Easy Inventory | New Purchase Order
                             </div>
                         </div>
 
-
                         <div class="row">
 
-                            <div class="col-md-4">
+                            <div class="col-md-1">
                                 <div class="mb-3">
-                                    <label for="po_date" class="form-label">Date</label>
-                                    <input class="form-control" type="date" name="po_date" value="{{ $curr_date }}" id="po_date">
+                                    <label for="invoice_no" class="form-label">Invoice #</label>
+                                    <input class="form-control readonly" type="text" name="invoice_no" value="{{ $invoice_id }}" id="invoice_no" readonly>
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="mb-3">
-                                    <label for="po_number" class="form-label">PO #</label>
-                                    <input class="form-control" type="text" name="po_number" value="" id="po_number">
+                                    <label for="invoice_date" class="form-label">Date</label>
+                                    <input class="form-control" type="date" name="invoice_date" value="{{ $curr_date }}" id="invoice_date">
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="supplier_id" class="form-label">Supplier</label>
-                                    <select id="supplier_id" name="supplier_id" class="form-select select2" aria-label="Supplier">
+                                    <label for="category_id" class="form-label">Category</label>
+                                    <select id="category_id" name="category_id" class="form-select select2" aria-label="Category">
                                         <option value="">---</option>
-                                        @foreach($suppliers as $option)
+
+                                        @foreach($categories as $option)
                                             <option value="{{ $option->id }}">{{ $option->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="category_id" class="form-label">Category</label>
-                                    <select id="category_id" name="category_id" class="form-select select2" aria-label="Category">
-                                        <option value="">---</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="product_id" class="form-label">Product</label>
                                     <select id="product_id" name="product_id" class="form-select select2" aria-label="Product">
@@ -78,7 +69,14 @@ Easy Inventory | New Purchase Order
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-1">
+                                <div class="mb-3">
+                                    <label for="current_stock_qty" class="form-label">Qty</label>
+                                    <input class="form-control readonly" type="text" value="0" id="current_stock_qty" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="addPurchaseOrderRow" class="form-label" style="margin-top: 40px;"></label>
 
@@ -163,55 +161,20 @@ Easy Inventory | New Purchase Order
 
     $(document).ready(function(){
 
-        $(document).on("change", "select#supplier_id", function () {
-
-            var supplierId = $(this).val();
-            var categorySelect = $("select#category_id");
-            var productSelect = $("select#product_id");
-            var html;
-
-            categorySelect.val("");
-            productSelect.val("");
-
-            $.ajax({
-                url: "{{ route('get-categories-by-supplier') }}",
-                type: "GET",
-                data: {supplier_id: supplierId},
-                success: function (data) {
-
-                    console.log(data);
-
-                    if (!data || !data.length) {
-                        html = "<option value=''>No Categories Available</option>";
-                        categorySelect.html(html);
-                        return;
-                    }
-
-                    html = "<option value=''>Select Category</option>";
-
-                    $.each(data, function (key, val) {
-                        html += "<option value='" + val.category_id + "'>" + val.category.name + "</option>";
-                    });
-
-                    categorySelect.html(html);
-                }
-            });
-        });
-
         $(document).on("change", "select#category_id", function () {
+
             var categoryId = $(this).val();
-            var supplierId = $("select#supplier_id").val();
             var productSelect = $("select#product_id");
+            var currentStockQty = $("input#current_stock_qty");
             var html;
 
             productSelect.val("");
-
-            //console.log(categoryId, supplierId);
+            currentStockQty.val("0"); //Reset value
 
             $.ajax({
-                url: "{{ route('get-products-by-supplier-and-category') }}",
+                url: "{{ route('get-products-by-category') }}",
                 type: "GET",
-                data: {supplier_id: supplierId, category_id: categoryId},
+                data: {category_id: categoryId},
                 success: function (data) {
 
                     console.log(data);
@@ -233,6 +196,33 @@ Easy Inventory | New Purchase Order
             });
         });
 
+        $(document).on("change", "select#product_id", function () {
+
+            var productId = $(this).val();
+            var currentStockQty = $("input#current_stock_qty");
+            var html;
+
+            currentStockQty.val("0"); //Reset value
+
+            $.ajax({
+                url: "{{ route('get-product-available-qty') }}",
+                type: "GET",
+                data: {product_id: productId},
+                success: function (data) {
+
+                    console.log(data);
+
+                    if (typeof (data) === "undefined") {
+                        console.error("Unable to fetch product qty");
+                        return;
+                    }
+
+                    currentStockQty.val(data);
+                }
+            });
+        });
+
+
         $(document).on("click", "button#addPurchaseOrderRow", function(){
 
             console.log("Adding row..");
@@ -244,9 +234,6 @@ Easy Inventory | New Purchase Order
             var category_name = $("#category_id").find("option:selected").text();
             var product_id = $("#product_id").val();
             var product_name = $("#product_id").find("option:selected").text();
-
-
-
             var vars = {globalPosition: "top right", className: "error"};
             var source, template, data, html;
 

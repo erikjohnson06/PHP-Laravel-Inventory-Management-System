@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Purchase Orders
+    Easy Inventory | Invoices
 @endsection
 
 @section('admin')
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Purchase Orders - All</h4>
+                    <h4 class="mb-sm-0">Invoices</h4>
                 </div>
             </div>
         </div>
@@ -25,8 +25,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('purchaseorder.add') }}">
-                            <i class="fa fa-plus-square"></i>&nbsp;Create New PO
+                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('invoice.add') }}">
+                            <i class="fa fa-plus-square"></i>&nbsp;Create New Invoice
                         </a>
 
                         <br />
@@ -37,13 +37,10 @@
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>PO #</th>
-                                <th>PO Date</th>
-                                <th>Product</th>
-                                <th>Qty</th>
-                                <th>Category</th>
-                                <th>Supplier</th>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Invoice Date</th>
+                                <th>Description</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -61,29 +58,15 @@
                                         else if ($row->status_id == 1){
                                             $rowClass = "approved";
                                         }
-                                        else if ($row->status_id == 2){ //Cancelled
-                                            $rowClass = "inactive";
-                                        }
-
-                                        $desc = $row['product']['id'] . " - " . $row['product']['name'];
                                     @endphp
 
                                     <tr class='{{ $rowClass }}'>
-                                        <td>{{ $row->id }}</td>
-                                        <td>{{ $row->po_number }}</td>
-                                        <td>{{ date('n/j/Y', strtotime($row->po_date)) }}</td>
-                                        <td class="align-left overflow-text">{{ $desc }}</td>
-                                        <td>{{ $row->purchase_qty }}</td>
-                                        <td>{{ $row['category']['name'] }}</td>
-                                        <td>{{ $row['supplier']['name'] }}</td>
-                                        <td>{{ $row['status']['status'] }}</td>
-                                        <td>
-                                            @if ($row->status_id == 0)
-                                                <a href="{{ route('purchaseorder.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            @endif
-                                        </td>
+                                        <td>{{ $row->invoice_no }}</td>
+                                        <td>{{ $row->invoice_no }}</td>
+                                        <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
+                                        <td class="align-left"></td>
+                                        <td></td>
+                                        <td>{{ $row->status_id }}</td>
                                     </tr>
                                 @endforeach
 

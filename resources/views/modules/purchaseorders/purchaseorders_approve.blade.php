@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Products
+    Easy Inventory | Purchase Approve
 @endsection
 
 @section('admin')
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Products - All</h4>
+                    <h4 class="mb-sm-0">Purchase Orders - Approve</h4>
                 </div>
             </div>
         </div>
@@ -25,8 +25,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('product.add') }}">
-                            <i class="fa fa-plus-square"></i>&nbsp;Add New
+                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('purchaseorders.all') }}">
+                            <i class="ri-arrow-left-s-line"></i>&nbsp;View All POs
                         </a>
 
                         <br />
@@ -38,10 +38,13 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Supplier</th>
+                                <th>PO #</th>
+                                <th>PO Date</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Description</th>
                                 <th>Category</th>
-                                <!--<th>Unit</th>-->
+                                <th>Supplier</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -52,29 +55,27 @@
                                 @foreach($data as $row)
 
                                     @php
-                                        $rowClass = "";
-                                        if ($row->status_id == 4){
-                                            $rowClass = "inactive";
-                                        }
-                                        else if ($row->status_id == 3){
-                                            $rowClass = "onHold";
-                                        }
+                                        $rowClass = "onHold";
                                     @endphp
 
                                     <tr class='{{ $rowClass }}'>
                                         <td>{{ $row->id }}</td>
-                                        <td class="align-left overflow-text">{{ $row->name }}</td>
-                                        <td>{{ $row['supplier']['name'] }}</td>
+                                        <td>{{ $row->po_number }}</td>
+                                        <td>{{ date('n/j/Y', strtotime($row->po_date)) }}</td>
+                                        <td class="align-left overflow-text">{{ $row['product']['id'] . " - " . $row['product']['name'] }}</td>
+                                        <td>{{ $row->purchase_qty }}</td>
+                                        <td>{{ $row->po_description }}</td>
                                         <td>{{ $row['category']['name'] }}</td>
-                                        <!--<td>{{ $row['unit']['name'] }}</td>-->
+                                        <td>{{ $row['supplier']['name'] }}</td>
+
                                         <td>{{ $row['status']['status'] }}</td>
                                         <td>
-                                            <a href="{{ route('product.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
 
-                                            <a href="{{ route('product.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
+                                            <a href="{{ route('purchaseorder.approve', $row->id) }}" class="btn btn-primary sm approveItem" title="Approve">
+                                                <i class="fas fa-check-circle"></i>
+                                            </a>
+                                            <a href="{{ route('purchaseorder.cancel', $row->id) }}" class="btn btn-danger sm cancelItem" title="Cancel">
+                                                <i class="fas fa-times"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -89,4 +90,7 @@
         </div> <!-- end row -->
     </div> <!-- container-fluid -->
 </div>
+@endsection
+
+@section('javascript')
 @endsection

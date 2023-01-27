@@ -33,7 +33,7 @@
                         <br />
 
                         <table id="datatable"
-                               class="table table-bordered dt-responsive nowrap"
+                               class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
