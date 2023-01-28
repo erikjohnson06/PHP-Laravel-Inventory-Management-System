@@ -55,14 +55,6 @@ table td.align-center {
     background-color: #ddd;
 }
 
-/*
-.dt-body-nowrap {
-   overflow-wrap: break-word;
+.hide {
+    display: none;
 }
-
-table td.overflow-text {
-    max-width: 200px;
-
-    overflow-wrap: break-word;
-
-}*/

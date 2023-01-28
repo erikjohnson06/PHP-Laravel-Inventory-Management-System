@@ -10,6 +10,7 @@ use App\Models\InvoiceStatus;
 use App\Models\InvoiceDetail;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
+use App\Models\PaymentStatus;
 use App\Models\Product;
 use App\Models\ProductStatus;
 use App\Models\PurchaseOrder;
@@ -50,6 +51,10 @@ class InvoiceController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
 
+        $payment_statuses = PaymentStatus::orderBy('id','ASC')->get();
+
+        $customers = Customer::where("status_id", 1)->get();
+
         $invoice_data = Invoice::orderBy("id", "DESC")->first();
         $invoice_id = 0; //TO DO: need to re-do this in case multiple users are adding invoices at the same time
 
@@ -64,8 +69,10 @@ class InvoiceController extends Controller
 
         return view("modules.invoices.invoice_add", [
             "categories" => $categories,
+            "customers" => $customers,
             "invoice_id" => $invoice_id,
-            "curr_date" => $curr_date
+            "curr_date" => $curr_date,
+            "payment_statuses" => $payment_statuses
         ]);
     }
 }

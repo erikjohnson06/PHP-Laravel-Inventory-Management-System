@@ -78,9 +78,9 @@ Easy Inventory | New Invoice
 
                             <div class="col-md-2">
                                 <div class="mb-3">
-                                    <label for="addPurchaseOrderRow" class="form-label" style="margin-top: 40px;"></label>
+                                    <label for="addInvoiceDetailRow" class="form-label" style="margin-top: 40px;"></label>
 
-                                    <button type="button" class="btn btn-link btn-rounded waves-effect waves-light" id="addPurchaseOrderRow">
+                                    <button type="button" class="btn btn-link btn-rounded waves-effect waves-light" id="addInvoiceDetailRow">
                                         <i class="fa fa-plus-circle"></i>&nbsp;Add Item
                                     </button>
 
@@ -92,7 +92,7 @@ Easy Inventory | New Invoice
 
                     <div class="card-body">
 
-                        <form method="post" action="{{ route('store.purchaseorder') }}" id="purchaseOrderAddForm">
+                        <form method="post" action="{{ route('store.purchaseorder') }}" id="invoiceAddForm">
                             @csrf
 
                             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
@@ -101,25 +101,38 @@ Easy Inventory | New Invoice
                                     <tr>
                                         <th>Category</th>
                                         <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Unit Price</th>
-                                        <!--<th>Purchase Price</th>-->
-                                        <th>Description</th>
-                                        <th>Total Price</th>
+                                        <th width="7%">Qty</th>
+                                        <th width="10%">Unit Price</th>
+                                        <th width="15%">Total Price</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    <tr id="totalRow">
-                                        <td colspan="5"></td>
+
+                                    <tr>
+                                        <td colspan="4">Discount</td>
                                         <td>
                                             <input
                                                 type="text"
-                                                name="purchaseOrderTotal"
-                                                id="purchaseOrderTotal"
+                                                name="invoiceDiscountAmount"
+                                                id="invoiceDiscountAmount"
+                                                value=""
+                                                placeholder="0.00"
+                                                class="form-control invoiceDiscountAmount"
+                                                />
+                                        </td>
+
+                                    </tr>
+                                    <tr id="totalRow">
+                                        <td colspan="4">Invoice Total</td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="invoiceTotal"
+                                                id="invoiceTotal"
                                                 value="0"
-                                                class="form-control purchaseOrderTotal"
+                                                class="form-control invoiceTotal"
                                                 readonly
                                                 style="background-color: #ddd;"
                                                 />
@@ -129,9 +142,62 @@ Easy Inventory | New Invoice
                                         </td>
                                     </tr>
                                 </tbody>
-
                             </table>
 
+                            <br />
+
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <textarea name="comments" class="form-control" id="comments" placeholder="Comments"></textarea>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label>Payment Status</label>
+                                    <select name="payment_status" id="payment_status" class="form-select">
+                                        <option value="">---</option>
+                                        @foreach($payment_statuses as $option)
+                                            <option value="{{ $option->id }}">{{ $option->status }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input
+                                        type="text"
+                                        name="paid_amount"
+                                        class="form-control payment_amount hide"
+                                        placeholder="Payment Amount $"
+                                        />
+                                </div>
+
+                                <div class="form-group col-md-9">
+
+                                    <label>Customer</label>
+                                    <select name="customer_id" id="customer_id" class="form-select">
+                                        <option value="">---</option>
+                                        @foreach($customers as $option)
+                                            <option value="{{ $option->id }}">{{ $option->id }} - {{ $option->name }}</option>
+                                        @endforeach
+                                        <option value="0"> [+] Add New Customer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Add Customer Form -->
+                            <div class="row addNewCustomer mt-4 hide">
+                                <div class="form-group col-md-4">
+                                    <input type="text" name="customer_name" id="customer_name" class="form-control" placeholder="New Customer Name" />
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <input type="text" name="customer_phone" id="customer_phone" class="form-control" placeholder="Phone Number" />
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <input type="text" name="customer_email" id="customer_email" class="form-control" placeholder="Email Address" />
+                                </div>
+                            </div>
                             <br />
 
                             <div class="form-group">
@@ -223,13 +289,10 @@ Easy Inventory | New Invoice
         });
 
 
-        $(document).on("click", "button#addPurchaseOrderRow", function(){
+        $(document).on("click", "button#addInvoiceDetailRow", function(){
 
-            console.log("Adding row..");
-
-            var po_date = $("#po_date").val();
-            var po_number = $("#po_number").val();
-            var supplier_id = $("#supplier_id").val();
+            var invoice_date = $("#invoice_date").val();
+            var invoice_no = $("#invoice_no").val();
             var category_id = $("#category_id").val();
             var category_name = $("#category_id").find("option:selected").text();
             var product_id = $("#product_id").val();
@@ -237,18 +300,13 @@ Easy Inventory | New Invoice
             var vars = {globalPosition: "top right", className: "error"};
             var source, template, data, html;
 
-            if (!po_date){
+            if (!invoice_date){
                 $.notify("PO Date is required", vars);
                 return false;
             }
 
-            if (!po_number){
+            if (!invoice_no){
                 $.notify("PO Number is required", vars);
-                return false;
-            }
-
-            if (!supplier_id){
-                $.notify("Supplier is required", vars);
                 return false;
             }
 
@@ -265,40 +323,44 @@ Easy Inventory | New Invoice
             source = $("script#document-template").html();
             template = Handlebars.compile(source);
             data = {
-                po_date: po_date,
-                po_number: po_number,
-                supplier_id: supplier_id,
+                invoice_date: invoice_date,
+                invoice_no: invoice_no,
                 category_id: category_id,
                 category_name: category_name,
                 product_id: product_id,
                 product_name: product_name
             };
             html = template(data);
-            $("form#purchaseOrderAddForm table tbody").prepend(html);
+            $("form#invoiceAddForm table tbody").prepend(html);
         });
 
-        $(document).on("click", "form#purchaseOrderAddForm table tbody tr i.removePurchaseOrderLine", function(){
-            $(this).closest("tr.PurchaseOrderLine").remove();
+        $(document).on("click", "form#invoiceAddForm table tbody tr i.removeInvoiceDetailLine", function(){
+            $(this).closest("tr.InvoiceDetailLine").remove();
             calculateTotalPurchaseOrderAmount();
         });
 
         //Calculate line total
-        $(document).on("keyup click", "form#purchaseOrderAddForm table tbody tr input.purchase_qty, form#purchaseOrderAddForm table tbody tr input.unit_price", function(){
+        $(document).on("keyup click", "form#invoiceAddForm table tbody tr input.sales_qty, form#invoiceAddForm table tbody tr input.unit_price", function(){
 
-// parseFloat(unitPrice.replace(/,/g, "")).toFixed(2)
             var unitPrice = $(this).closest("tr").find("input.unit_price").val();
-            var qty = $(this).closest("tr").find("input.purchase_qty").val();
+            var qty = $(this).closest("tr").find("input.sales_qty").val();
             var lineTotal = parseFloat(unitPrice.replace(/,/g, "")) * parseFloat(qty.replace(/,/g, ""));
 
-            $(this).closest("tr").find("input.purchase_price").val(lineTotal.toFixed(2));
+            $(this).closest("tr").find("input.sales_price").val(lineTotal.toFixed(2));
+            $("input#invoiceDiscountAmount").trigger("keyup");
+        });
+
+        $(document).on("keyup", "form#invoiceAddForm table tbody tr input#invoiceDiscountAmount", function(){
+
             calculateTotalPurchaseOrderAmount();
         });
 
         function calculateTotalPurchaseOrderAmount(){
 
             var total = 0;
+            var discount = $("input#invoiceDiscountAmount").val();
 
-            $("form#purchaseOrderAddForm table tbody tr input.purchase_price").each(function(){
+            $("form#invoiceAddForm table tbody tr input.sales_price").each(function(){
 
                 var val = $(this).val();
                 if (!isNaN(val) && val.length != 0){
@@ -306,18 +368,50 @@ Easy Inventory | New Invoice
                 }
             });
 
-            $("input#purchaseOrderTotal").val(total.toFixed(2));
+            if (!isNaN(discount) && discount.length != 0){
+                total -= parseFloat(discount.replace(/,/g, ""));
+            }
+
+            if (total < 0){
+                $.notify("Invoice amount cannot be negative", {globalPosition: "top right", className: "error"});
+            }
+
+            $("input#invoiceTotal").val(total.toFixed(2));
         };
     });
 
+        $(document).on("change", "select#payment_status", function () {
+
+            var payment_status = $(this).val();
+
+            if (payment_status == "3"){ //Partial payment - show amount field
+                $("form#invoiceAddForm input.payment_amount").show();
+            }
+            else {
+                $("form#invoiceAddForm input.payment_amount").hide().val("");
+            }
+        });
+
+        //
+
+        $(document).on("change", "select#customer_id", function () {
+
+            var id = $(this).val();
+
+            if (id == "0"){ //Partial payment - show amount field
+                $("form#invoiceAddForm div.addNewCustomer").show();
+            }
+            else {
+                $("form#invoiceAddForm div.addNewCustomer").hide();
+            }
+        });
 </script>
 
 <script id="document-template" type="text/x-handlebars-template">
 
-    <tr class="PurchaseOrderLine">
-        <input type="hidden" name="po_date[]" value="@{{po_date}}" />
-        <input type="hidden" name="po_number[]" value="@{{po_number}}" />
-        <input type="hidden" name="supplier_id[]" value="@{{supplier_id}}" />
+    <tr class="InvoiceDetailLine">
+        <input type="hidden" name="invoice_date" value="@{{invoice_date}}" />
+        <input type="hidden" name="invoice_no" value="@{{invoice_no}}" />
 
         <td>
             <input type="hidden" name="category_id[]" value="@{{category_id}}" />
@@ -330,7 +424,7 @@ Easy Inventory | New Invoice
         </td>
 
         <td>
-            <input type="number" min="1" class="form-control purchase_qty text-right" name="purchase_qty[]" value="" />
+            <input type="number" min="1" class="form-control sales_qty text-right" name="sales_qty[]" value="" />
         </td>
 
         <td>
@@ -338,15 +432,11 @@ Easy Inventory | New Invoice
         </td>
 
         <td>
-            <input type="text" class="form-control" name="po_description[]" value="" />
+            <input type="number" class="form-control sales_price text-right" name="sales_price[]" value="0" readonly />
         </td>
 
         <td>
-            <input type="number" class="form-control purchase_price text-right" name="purchase_price[]" value="0" readonly />
-        </td>
-
-        <td>
-            <i class="btn btn-link fas fa-window-close removePurchaseOrderLine"></i>
+            <i class="btn btn-link fas fa-window-close removeInvoiceDetailLine"></i>
         </td>
     </tr>
 </script>
