@@ -98,7 +98,11 @@ Route::middleware(['auth'])->group(function(){
 
     Route::controller(InvoiceController::class)->group(function () {
         Route::get('/invoices/all', 'viewInvoicesAll')->name('invoices.all');
+        Route::get('/invoices/pending', 'viewInvoicesPEnding')->name('invoices.pending');
         Route::get('/invoice/create', 'viewAddInvoice')->name('invoice.add');
+        Route::post('/invoice/store', 'createInvoice')->name('store.invoice');
+        Route::get('/invoice/delete/{id}', 'deleteInvoice')->name('invoice.delete');
+        Route::get('/invoice/approval/{id}', 'viewApproveInvoice')->name('invoice.approval');
     });
 
     Route::controller(JSController::class)->group(function () {

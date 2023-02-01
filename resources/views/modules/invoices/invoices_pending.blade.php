@@ -25,8 +25,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('invoice.add') }}">
-                            <i class="fa fa-plus-square"></i>&nbsp;Create New Invoice
+                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('invoices.all') }}">
+                            <i class="ri-arrow-left-s-line"></i>&nbsp;View Approved Invoices
                         </a>
 
                         <br />
@@ -41,6 +41,7 @@
                                 <th>Customer</th>
                                 <th>Invoice Date</th>
                                 <th>Total</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -66,7 +67,15 @@
                                         <td>{{ $row['payment']['customer']['name'] }}</td>
                                         <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
                                         <td class="align-right">{{ $totalAmount }}</td>
-                                        <td></td>
+                                        <td>{{ $row['status']['status'] }}</td>
+                                        <td>
+                                            <a href="{{ route('invoice.approval', $row->id) }}" class="btn btn-primary sm" title="Approve">
+                                                <i class="fas fa-check-circle"></i>
+                                            </a>
+                                            <a href="{{ route('invoice.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Cancel">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
 

@@ -137,7 +137,7 @@ Easy Inventory | New Purchase Order
                             <br />
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
+                                <button type="button" id="submitPO" class="btn btn-primary waves-effect waves-light">Save</button>
 
                             </div>
 
@@ -156,8 +156,8 @@ Easy Inventory | New Purchase Order
 @section('javascript')
 
 <!-- Select 2 -->
-<script src="{{ asset('backend/assets/libs/select2/js/select2.min.js') }}"></script>
-<script src="{{ asset('backend/assets/js/pages/form-advanced.init.js') }}"></script>
+<script type="text/javascript" src="{{ asset('backend/assets/libs/select2/js/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('backend/assets/js/pages/form-advanced.init.js') }}"></script>
 
 <script type="text/javascript">
 
@@ -245,8 +245,6 @@ Easy Inventory | New Purchase Order
             var product_id = $("#product_id").val();
             var product_name = $("#product_id").find("option:selected").text();
 
-
-
             var vars = {globalPosition: "top right", className: "error"};
             var source, template, data, html;
 
@@ -298,7 +296,6 @@ Easy Inventory | New Purchase Order
         //Calculate line total
         $(document).on("keyup click", "form#purchaseOrderAddForm table tbody tr input.purchase_qty, form#purchaseOrderAddForm table tbody tr input.unit_price", function(){
 
-// parseFloat(unitPrice.replace(/,/g, "")).toFixed(2)
             var unitPrice = $(this).closest("tr").find("input.unit_price").val();
             var qty = $(this).closest("tr").find("input.purchase_qty").val();
             var lineTotal = parseFloat(unitPrice.replace(/,/g, "")) * parseFloat(qty.replace(/,/g, ""));
@@ -321,6 +318,54 @@ Easy Inventory | New Purchase Order
 
             $("input#purchaseOrderTotal").val(total.toFixed(2));
         };
+
+        $("form#purchaseOrderAddForm button#submitPO").on("click", function(e){
+
+            e.preventDefault();
+
+            var form = $("form#purchaseOrderAddForm");
+            var poDate = $("input#po_date").val();
+            var poNumber = $("input#po_number").val();
+            var poDetailLines = form.find("table tbody tr.PurchaseOrderLine");
+            var purchase_qty, unit_price;
+
+            try {
+
+                if (!poDate){
+                    throw "PO Date is required";
+                }
+
+                if (!poNumber){
+                    throw "PO Number is required";
+                }
+
+                if (!poDetailLines || !poDetailLines.length){
+                    throw "No items have been added to the PO";
+                }
+                else {
+
+                    poDetailLines.each(function(){
+
+                        purchase_qty = form.find("input.purchase_qty").val();
+                        unit_price = form.find("input.unit_price").val();
+
+                        if (isNaN(purchase_qty) || parseFloat(purchase_qty) < 0){
+                            throw "Purchase Quantity is not valid";
+                        }
+
+                        if (isNaN(unit_price) || parseFloat(unit_price) < 0){
+                            throw "Unit Price is not valid";
+                        }
+                    });
+                }
+            }
+            catch (e){
+                $.notify(e, {globalPosition: "top right", className: "error"});
+                return;
+            }
+
+            form.submit();
+        });
     });
 
 </script>

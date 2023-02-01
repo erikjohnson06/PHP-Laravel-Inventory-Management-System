@@ -13,4 +13,8 @@ class Invoice extends Model
     public function status(){
         return $this->belongsTo(InvoiceStatus::class, "status_id", "id");
     }
+
+    public function payment(){
+        return $this->belongsTo(Payment::class, "invoice_no", "invoice_id");
+    }
 }

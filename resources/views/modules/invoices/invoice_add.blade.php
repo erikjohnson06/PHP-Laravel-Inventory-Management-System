@@ -25,7 +25,7 @@ Easy Inventory | New Invoice
                                 <h4 class="card-title">New Invoice</h4>
                             </div>
                             <div class="col-sm-2">
-                                <a class="waves-effect waves-light float-end" href="{{ route('purchaseorders.all') }}">
+                                <a class="waves-effect waves-light float-end" href="{{ route('invoices.all') }}">
                                     <i class="ri-arrow-left-s-line "></i>&nbsp;Back
                                 </a>
                             </div>
@@ -92,7 +92,7 @@ Easy Inventory | New Invoice
 
                     <div class="card-body">
 
-                        <form method="post" action="{{ route('store.purchaseorder') }}" id="invoiceAddForm">
+                        <form method="post" action="{{ route('store.invoice') }}" id="invoiceAddForm">
                             @csrf
 
                             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
@@ -165,7 +165,8 @@ Easy Inventory | New Invoice
                                     </select>
                                     <input
                                         type="text"
-                                        name="paid_amount"
+                                        name="payment_amount"
+                                        id="payment_amount"
                                         class="form-control payment_amount hide"
                                         placeholder="Payment Amount $"
                                         />
@@ -201,8 +202,7 @@ Easy Inventory | New Invoice
                             <br />
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
-
+                                <button type="button" id="submitInvoice" class="btn btn-primary waves-effect waves-light">Save</button>
                             </div>
 
                         </form>
@@ -335,7 +335,7 @@ Easy Inventory | New Invoice
         });
 
         $(document).on("click", "form#invoiceAddForm table tbody tr i.removeInvoiceDetailLine", function(){
-            $(this).closest("tr.InvoiceDetailLine").remove();
+            $(this).closest("tr.invoiceDetailLine").remove();
             calculateTotalPurchaseOrderAmount();
         });
 
@@ -372,23 +372,22 @@ Easy Inventory | New Invoice
                 total -= parseFloat(discount.replace(/,/g, ""));
             }
 
-            if (total < 0){
-                $.notify("Invoice amount cannot be negative", {globalPosition: "top right", className: "error"});
-            }
+            //if (total < 0){
+            //    $.notify("Invoice amount cannot be negative", {globalPosition: "top right", className: "error"});
+            //}
 
             $("input#invoiceTotal").val(total.toFixed(2));
         };
-    });
 
         $(document).on("change", "select#payment_status", function () {
 
             var payment_status = $(this).val();
 
             if (payment_status == "3"){ //Partial payment - show amount field
-                $("form#invoiceAddForm input.payment_amount").show();
+                $("form#invoiceAddForm input#payment_amount").show();
             }
             else {
-                $("form#invoiceAddForm input.payment_amount").hide().val("");
+                $("form#invoiceAddForm input#payment_amount").hide().val("");
             }
         });
 
@@ -405,11 +404,92 @@ Easy Inventory | New Invoice
                 $("form#invoiceAddForm div.addNewCustomer").hide();
             }
         });
+
+        $("form#invoiceAddForm button#submitInvoice").on("click", function(e){
+
+            e.preventDefault();
+
+            var form = $("form#invoiceAddForm");
+            var invoiceTotal = form.find("input#invoiceTotal").val();
+            var invoiceDiscount = form.find("input#invoiceDiscountAmount").val();
+            var paymentStatus = form.find("select#payment_status").val();
+            var paymentAmount = form.find("input#payment_amount").val();
+            var customerId = form.find("select#customer_id").val();
+            var newCustomerName = form.find("div.addNewCustomer input#customer_name").val();
+            var newCustomerPhone = form.find("div.addNewCustomer input#customer_phone").val();
+            var newCustomerEmail = form.find("div.addNewCustomer input#customer_email").val();
+            var invoiceDetailLines = form.find("table tbody tr.invoiceDetailLine");
+            var sales_qty, unit_price, sales_price;
+
+            console.log(invoiceTotal, paymentStatus, paymentAmount, invoiceDetailLines, customerId);
+
+            try {
+
+                if (!invoiceDetailLines || !invoiceDetailLines.length){
+                    throw "No items have been added to the Invoice";
+                }
+                else {
+
+                    invoiceDetailLines.each(function(){
+
+                        sales_qty = form.find("input.sales_qty").val();
+                        unit_price = form.find("input.unit_price").val();
+                        sales_price = form.find("input.sales_price").val();
+
+                        if (isNaN(sales_qty) || parseFloat(sales_qty) < 0){
+                            throw "Sales Quantity value is not valid";
+                        }
+
+                        if (isNaN(unit_price) || parseFloat(sales_qty) < 0){
+                            throw "Unit Price value is not valid";
+                        }
+
+                        if (isNaN(sales_price) || parseFloat(sales_qty) < 0){
+                            throw "Sales Price value is not valid";
+                        }
+                    });
+                }
+
+                if (isNaN(invoiceDiscount) || parseFloat(invoiceDiscount) > parseFloat(invoiceTotal)){
+                    throw "Discount Amount cannot exceed the Invoice total";
+                }
+
+                if (parseFloat(invoiceTotal) < 0){
+                    throw "Invoice amount cannot be negative";
+                }
+
+                if (paymentAmount && parseFloat(paymentAmount) > parseFloat(invoiceTotal)){
+                    throw "Paid Amount cannot exceed the Invoice total";
+                }
+
+                if (customerId === ""){
+                    throw "Please select a Customer";
+                }
+                else if (parseInt(customerId) === 0){ //New customer
+
+                    if (!newCustomerName || !newCustomerPhone || !newCustomerEmail){
+                        throw "New customer info is not complete";
+                    }
+                }
+            }
+            catch (e){
+                $.notify(e, {globalPosition: "top right", className: "error"});
+                return;
+            }
+
+            form.submit();
+        });
+
+    });
+
+
+
+
 </script>
 
 <script id="document-template" type="text/x-handlebars-template">
 
-    <tr class="InvoiceDetailLine">
+    <tr class="invoiceDetailLine">
         <input type="hidden" name="invoice_date" value="@{{invoice_date}}" />
         <input type="hidden" name="invoice_no" value="@{{invoice_no}}" />
 

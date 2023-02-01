@@ -33,7 +33,7 @@
         <link href="{{ asset('backend/assets/css/styles.css') }}" rel="stylesheet" type="text/css" />
 
         @yield('css')
-        
+
     </head>
 
     <body data-topbar="dark">
@@ -112,7 +112,7 @@
         <script type="text/javascript" src="{{ asset('backend/assets/js/handlebars.js') }}"></script>
 
         <!-- Notify JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" ></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" ></script>
 
         <script type="text/javascript" >
             @if(Session::has('message'))
