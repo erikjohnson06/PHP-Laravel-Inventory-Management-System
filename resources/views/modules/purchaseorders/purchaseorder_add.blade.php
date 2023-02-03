@@ -225,7 +225,7 @@ Easy Inventory | New Purchase Order
                     html = "<option value=''>Select Product</option>";
 
                     $.each(data, function (key, val) {
-                        html += "<option value='" + val.id + "'>" + val.name + "</option>";
+                        html += "<option value='" + val.id + "'>" + val.id + " - " + val.name + "</option>";
                     });
 
                     productSelect.html(html);
@@ -384,7 +384,7 @@ Easy Inventory | New Purchase Order
 
         <td>
             <input type="hidden" name="product_id[]" value="@{{product_id}}" />
-            @{{ product_name }}
+            @{{product_id}} - @{{ product_name }}
         </td>
 
         <td>

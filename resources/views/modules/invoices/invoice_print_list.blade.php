@@ -68,7 +68,7 @@
                                         <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
                                         <td class="align-right">{{ $totalAmount }}</td>
                                         <td>
-                                            <a href="{{ route('invoice.print', $row->id) }}" class="btn btn-primary sm" title="Print Invoice">
+                                            <a href="{{ route('invoice.approval', $row->id) }}" class="btn btn-primary sm" title="Print Invoice">
                                                 <i class="fa fa-print"></i>
                                             </a>
                                         </td>

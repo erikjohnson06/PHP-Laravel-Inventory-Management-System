@@ -8,6 +8,8 @@ table.dataTable td {
     text-align: center;
 }
 
+table.table th,
+table.table td,
 table.dataTable th,
 table.dataTable td {
     max-width: 200px;
@@ -38,6 +40,11 @@ table td.align-right {
 
 table td.align-center {
     text-align: center;
+}
+
+table th.tableCellHighlightFuscia,
+table td.tableCellHighlightFuscia {
+    background-color: #8B008B;
 }
 
 /** Adjust height of Select2 boxes **/

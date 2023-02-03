@@ -98,11 +98,14 @@ Route::middleware(['auth'])->group(function(){
 
     Route::controller(InvoiceController::class)->group(function () {
         Route::get('/invoices/all', 'viewInvoicesAll')->name('invoices.all');
-        Route::get('/invoices/pending', 'viewInvoicesPEnding')->name('invoices.pending');
+        Route::get('/invoices/pending', 'viewInvoicesPending')->name('invoices.pending');
         Route::get('/invoice/create', 'viewAddInvoice')->name('invoice.add');
         Route::post('/invoice/store', 'createInvoice')->name('store.invoice');
         Route::get('/invoice/delete/{id}', 'deleteInvoice')->name('invoice.delete');
         Route::get('/invoice/approval/{id}', 'viewApproveInvoice')->name('invoice.approval');
+        Route::post('/invoice/approve/{id}', 'approveInvoice')->name('invoice.approve');
+        Route::get('/invoices/print/{id}', 'viewPrintInvoice')->name('invoice.print');
+        //Route::get('/invoices/print', 'viewPrintInvoiceList')->name('invoice.print.list');
     });
 
     Route::controller(JSController::class)->group(function () {
