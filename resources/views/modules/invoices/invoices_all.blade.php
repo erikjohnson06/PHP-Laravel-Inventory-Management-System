@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Invoices
+Easy Inventory | Invoices
 @endsection
 
 @section('admin')
@@ -36,13 +36,13 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Customer</th>
-                                <th>Invoice Date</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Customer</th>
+                                    <th>Invoice Date</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
@@ -50,16 +50,16 @@
                                 @foreach($data as $row)
 
                                     @php
-                                        $rowClass = "";
+                                    $rowClass = "";
 
-                                        if ($row->status_id == 0){
-                                            $rowClass = "onHold";
-                                        }
-                                        else if ($row->status_id == 1){
-                                            $rowClass = "approved";
-                                        }
+                                    if ($row->status_id == 0){
+                                    $rowClass = "onHold";
+                                    }
+                                    else if ($row->status_id == 1){
+                                    $rowClass = "approved";
+                                    }
 
-                                        $totalAmount = "$" . number_format($row['payment']['total_amount'], 2);
+                                    $totalAmount = "$" . number_format($row['payment']['total_amount'], 2);
                                     @endphp
 
                                     <tr class='{{ $rowClass }}'>

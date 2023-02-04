@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Invoice;
-use App\Models\InvoiceStatus;
+//use App\Models\InvoiceStatus;
 use App\Models\InvoiceDetail;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
 use App\Models\PaymentStatus;
 use App\Models\Product;
-use App\Models\ProductStatus;
-use App\Models\PurchaseOrder;
-use App\Models\PurchaseOrderStatus;
-use App\Models\Supplier;
-use App\Models\Unit;
+//use App\Models\ProductStatus;
+//use App\Models\PurchaseOrder;
+//use App\Models\PurchaseOrderStatus;
+//use App\Models\Supplier;
+//use App\Models\Unit;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -114,9 +114,21 @@ class InvoiceController extends Controller
     public function viewPrintInvoice(int $id) : View {
 
         $invoice = Invoice::with("invoice_details")->findOrFail($id);
+        $payment = Payment::where('invoice_id', $invoice->invoice_no)->first();
 
         return view("modules.pdf.invoice_pdf", [
-            "invoice" => $invoice
+            "invoice" => $invoice,
+            "payment" => $payment
+        ]);
+    }
+
+
+    public function viewInvoiceDailyReport() : View {
+
+        $curr_date = (new DateTime)->format("m-d-y");
+
+        return view("modules.invoices.invoice_daily_report", [
+            "curr_date" => $curr_date
         ]);
     }
 
@@ -367,4 +379,46 @@ class InvoiceController extends Controller
         return redirect()->route("invoices.pending")->with($notifications);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse|View
+     */
+    public function searchInvoiceDataByDates(Request $request){
+
+        $start_date = DateTime::createFromFormat("Y-m-d", $request->start_date);  // date("Y-m-d", strtotime($request->start_date));
+        $end_date = DateTime::createFromFormat("Y-m-d", $request->end_date);
+
+        if (!$start_date || !$end_date){
+
+            $notifications = [
+                "message" => "Invalid Start or End Date",
+                "alert-type" => "error"
+            ];
+
+            return redirect()->back()->with($notifications);
+        }
+
+        //dd(intval($end_date->format("U")));
+
+        if (intval($end_date->format("U")) < intval($start_date->format("U"))){
+            $notifications = [
+                "message" => "Start Date must precede End Date",
+                "alert-type" => "error"
+            ];
+
+            return redirect()->back()->with($notifications);
+        }
+
+        $data = Invoice::whereBetween("invoice_date", [$start_date->format("Y-m-d"), $end_date->format("Y-m-d")])
+                ->where("status_id", 1)
+                ->get();
+
+
+
+        return view("modules.pdf.invoice_daily_report_pdf", [
+            "data" => $data,
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+        ]);
+    }
 }

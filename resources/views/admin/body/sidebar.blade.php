@@ -94,7 +94,21 @@
                                     <li><a href="{{ route('invoices.all') }}">View All</a></li>
                                     <li><a href="{{ route('invoices.pending') }}">View Pending</a></li>
                                     <li><a href="{{ route('invoice.add') }}">Create New Invoice</a></li>
+                                    <li><a href="{{ route('invoices.daily.report') }}">Daily Report</a></li>
                                     <!-- <li><a href="">Print Invoice List</a></li> -->
+                                </ul>
+                            </li>
+
+                            <li class="menu-title">Inventory</li>
+
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="ri-file-list-2-line "></i>
+                                    <span>Manage Inventory</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('stock.status.report') }}">Stock Status</a></li>
+                                    <li><a href="{{ route('stock.supplier.report') }}">Supplier / Product Report</a></li>
                                 </ul>
                             </li>
 

@@ -2,13 +2,13 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Approve Invoice
+Easy Inventory | Approve Invoice
 @endsection
 
 @section('admin')
 
 @php
-    $subtotal = 0;
+$subtotal = 0;
 @endphp
 
 <div class="page-content">
@@ -74,50 +74,50 @@
 
                                     @foreach($invoice['invoice_details'] as $k => $val)
 
-                                        @php
-                                            $subtotal += $val->sales_price
-                                        @endphp
-
-                                        <tr>
-
-                                            <input type="hidden" value="{{ $val->category_id }}" name="category_id[]">
-                                            <input type="hidden" value="{{ $val->product_id }}" name="product_id[]">
-                                            <input type="hidden" value="{{ $val->sales_qty }}" name="sales_qty[{{ $val->id }}]">
-
-                                            <td class="align-center">{{ $k + 1 }}</td>
-                                            <td class="align-center">{{ $val['category']['name'] }}</td>
-                                            <td class="align-left">{{ $val['product']['id'] }} - {{ $val['product']['name'] }}</td>
-                                            <td class="align-center tableCellHighlightFuscia">{{ $val['product']['quantity'] }}</td>
-                                            <td class="align-center">{{ $val->sales_qty }}</td>
-                                            <td class="align-center">${{ number_format($val->unit_price, 2) }}</td>
-                                            <td class="align-center">${{ number_format($val->sales_price, 2) }}</td>
-                                        </tr>
-                                    @endforeach()
+                                    @php
+                                    $subtotal += $val->sales_price
+                                    @endphp
 
                                     <tr>
-                                        <td class="align-right" colspan="6">Subtotal</td>
-                                        <td class="align-center">${{ number_format($subtotal, 2) }}</td>
-                                    </tr>
 
-                                     <tr>
-                                        <td class="align-right" colspan="6">Discount</td>
-                                        <td class="align-center">${{ number_format($payment->discount_amount, 2) }}</td>
-                                    </tr>
+                                <input type="hidden" value="{{ $val->category_id }}" name="category_id[]">
+                                <input type="hidden" value="{{ $val->product_id }}" name="product_id[]">
+                                <input type="hidden" value="{{ $val->sales_qty }}" name="sales_qty[{{ $val->id }}]">
 
-                                    <tr>
-                                        <td class="align-right" colspan="6">Paid Amount</td>
-                                        <td class="align-center">${{ number_format($payment->payment_amount, 2) }}</td>
-                                    </tr>
+                                <td class="align-center">{{ $k + 1 }}</td>
+                                <td class="align-center">{{ $val['category']['name'] }}</td>
+                                <td class="align-left">{{ $val['product']['id'] }} - {{ $val['product']['name'] }}</td>
+                                <td class="align-center tableCellHighlightFuscia">{{ $val['product']['quantity'] }}</td>
+                                <td class="align-center">{{ $val->sales_qty }}</td>
+                                <td class="align-center">${{ number_format($val->unit_price, 2) }}</td>
+                                <td class="align-center">${{ number_format($val->sales_price, 2) }}</td>
+                                </tr>
+                                @endforeach()
 
-                                    <tr>
-                                        <td class="align-right" colspan="6">Due Amount</td>
-                                        <td class="align-center">${{ number_format($payment->due_amount, 2) }}</td>
-                                    </tr>
+                                <tr>
+                                    <td class="align-right" colspan="6">Subtotal</td>
+                                    <td class="align-center">${{ number_format($subtotal, 2) }}</td>
+                                </tr>
 
-                                    <tr>
-                                        <td class="align-right" colspan="6">Total Invoice Amount</td>
-                                        <td class="align-center">${{ number_format($payment->total_amount, 2) }}</td>
-                                    </tr>
+                                <tr>
+                                    <td class="align-right" colspan="6">Discount</td>
+                                    <td class="align-center">${{ number_format($payment->discount_amount, 2) }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-right" colspan="6">Paid Amount</td>
+                                    <td class="align-center">${{ number_format($payment->payment_amount, 2) }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-right" colspan="6">Due Amount</td>
+                                    <td class="align-center">${{ number_format($payment->due_amount, 2) }}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-right" colspan="6">Total Invoice Amount</td>
+                                    <td class="align-center">${{ number_format($payment->total_amount, 2) }}</td>
+                                </tr>
                                 </tbody>
                             </table>
 

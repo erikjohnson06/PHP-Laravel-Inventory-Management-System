@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Invoices
+    Easy Inventory | Stock Status
 @endsection
 
 @section('admin')
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Invoices</h4>
+                    <h4 class="mb-sm-0">Stock Status</h4>
                 </div>
             </div>
         </div>
@@ -25,8 +25,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" href="{{ route('invoice.add') }}">
-                            <i class="fa fa-plus-square"></i>&nbsp;Create New Invoice
+                        <a class="btn btn-link btn-rounded waves-effect waves-light float-end" target="_blank" href="{{ route('stock.status.pdf') }}">
+                            <i class="fa fa-print"></i>&nbsp;Print
                         </a>
 
                         <br />
@@ -37,11 +37,12 @@
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
-                                <th>Invoice #</th>
-                                <th>Customer</th>
-                                <th>Invoice Date</th>
-                                <th>Total</th>
-                                <th>Action</th>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Supplier</th>
+                                <th>Unit</th>
+                                <th>Category</th>
+                                <th>On Hand</th>
                             </tr>
                             </thead>
 
@@ -51,33 +52,26 @@
 
                                     @php
                                         $rowClass = "";
-
-                                        if ($row->status_id == 0){
+                                        if ($row->quantity < 5){
+                                            $rowClass = "inactive";
+                                        }
+                                        else if ($row->quantity <10){
                                             $rowClass = "onHold";
                                         }
-                                        else if ($row->status_id == 1){
-                                            $rowClass = "approved";
-                                        }
-
-                                        $totalAmount = "$" . number_format($row['payment']['total_amount'], 2);
                                     @endphp
 
                                     <tr class='{{ $rowClass }}'>
-                                        <td>{{ $row->invoice_no }}</td>
-                                        <td>{{ $row['payment']['customer']['name'] }}</td>
-                                        <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
-                                        <td class="align-right">{{ $totalAmount }}</td>
-                                        <td>
-                                            <a href="{{ route('invoice.approval', $row->id) }}" class="btn btn-primary sm" title="Print Invoice">
-                                                <i class="fa fa-print"></i>
-                                            </a>
-                                        </td>
+                                        <td>{{ $row->id }}</td>
+                                        <td class="align-left overflow-text">{{ $row->name }}</td>
+                                        <td>{{ $row['supplier']['name'] }}</td>
+                                        <td>{{ $row['unit']['name'] }}</td>
+                                        <td>{{ $row['category']['name'] }}</td>
+                                        <td>{{ $row->quantity }}</td>
                                     </tr>
                                 @endforeach
 
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div> <!-- end col -->

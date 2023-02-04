@@ -31,14 +31,14 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="name" class="col-sm-2 col-form-label">Product Name</label>
+                                <label for="name" class="col-sm-2 form-label">Product Name</label>
                                 <div class="form-group col-sm-10">
                                     <input name="name" class="form-control" type="text" value=""  />
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="category_id" class="col-sm-2 col-form-label">Category</label>
+                                <label for="category_id" class="col-sm-2 form-label">Category</label>
                                 <div class="col-sm-10">
                                     <select name="category_id" class="form-select" aria-label="Category">
 
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="supplier_id" class="col-sm-2 col-form-label">Supplier</label>
+                                <label for="supplier_id" class="col-sm-2 form-label">Supplier</label>
                                 <div class="col-sm-10">
                                     <select name="supplier_id" class="form-select" aria-label="Supplier">
 
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="unit_id" class="col-sm-2 col-form-label">Unit of Measure</label>
+                                <label for="unit_id" class="col-sm-2 form-label">Unit of Measure</label>
                                 <div class="col-sm-10">
                                     <select name="unit_id" class="form-select" aria-label="Unit">
 
@@ -77,7 +77,7 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="status_id" class="col-sm-2 col-form-label">Status</label>
+                                <label for="status_id" class="col-sm-2 form-label">Status</label>
                                 <div class="col-sm-10">
                                     <select name="status_id" class="form-select" aria-label="Status">
                                         @foreach($statuses as $option)

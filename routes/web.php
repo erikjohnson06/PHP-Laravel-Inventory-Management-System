@@ -8,6 +8,7 @@ use App\Http\Controllers\PoS\InvoiceController;
 use App\Http\Controllers\PoS\JSController;
 use App\Http\Controllers\PoS\ProductController;
 use App\Http\Controllers\PoS\PurchaseOrderController;
+use App\Http\Controllers\PoS\StockController;
 use App\Http\Controllers\PoS\SupplierController;
 use App\Http\Controllers\PoS\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -105,7 +106,17 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/invoice/approval/{id}', 'viewApproveInvoice')->name('invoice.approval');
         Route::post('/invoice/approve/{id}', 'approveInvoice')->name('invoice.approve');
         Route::get('/invoices/print/{id}', 'viewPrintInvoice')->name('invoice.print');
-        //Route::get('/invoices/print', 'viewPrintInvoiceList')->name('invoice.print.list');
+        Route::get('/invoices/reports/daily', 'viewInvoiceDailyReport')->name('invoices.daily.report');
+        Route::get('/invoices/reports/daily/search', 'searchInvoiceDataByDates')->name('invoice.daily.search');
+    });
+
+    Route::controller(StockController::class)->group(function () {
+        Route::get('/stock/report/status', 'viewStockStatusReport')->name('stock.status.report');
+        Route::get('/stock/report/pdf', 'viewStockStatusPDF')->name('stock.status.pdf');
+        Route::get('/stock/report/supplier', 'viewStockSupplierReport')->name('stock.supplier.report');
+        Route::get('/supplier/report/pdf', 'viewSupplierReportPDF')->name('supplier.report.pdf');
+        Route::get('/product/report/pdf', 'viewProductReportPDF')->name('product.report.pdf');
+        //Route::get('/invoices/reports/daily/search', 'searchInvoiceDataByDates')->name('invoice.daily.search');
     });
 
     Route::controller(JSController::class)->group(function () {
