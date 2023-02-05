@@ -24,10 +24,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
 Route::middleware(['auth'])->group(function(){
 
     Route::controller(AdminController::class)->group(function () {
@@ -95,6 +91,8 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/purchaseorder/delete/{id}', 'deletePurchaseOrder')->name('purchaseorder.delete');
         Route::get('/purchaseorder/cancel/{id}', 'cancelPurchaseOrder')->name('purchaseorder.cancel');
         Route::post('/purchaseorder/store', 'createPurchaseOrder')->name('store.purchaseorder');
+        Route::get('/purchaseorder/reports/daily', 'viewPurchaseOrderDailyReport')->name('purchaseorder.daily.report');
+        Route::get('/purchaseorder/reports/daily/search', 'searchPurchaseOrderDataByDates')->name('purchaseorder.daily.search');
     });
 
     Route::controller(InvoiceController::class)->group(function () {
@@ -127,6 +125,10 @@ Route::middleware(['auth'])->group(function(){
     });
 });
 
+
+Route::get('/', function () {
+    return view('admin.index');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', function () {
     return view('admin.index');

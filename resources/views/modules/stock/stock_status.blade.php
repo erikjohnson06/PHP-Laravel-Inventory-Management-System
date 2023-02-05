@@ -42,7 +42,9 @@
                                 <th>Supplier</th>
                                 <th>Unit</th>
                                 <th>Category</th>
-                                <th>On Hand</th>
+                                <th>Purchased</th>
+                                <th>Sold</th>
+                                <th>Available</th>
                             </tr>
                             </thead>
 
@@ -51,6 +53,17 @@
                                 @foreach($data as $row)
 
                                     @php
+
+                                        $purchaseQtyTotal = App\Models\PurchaseOrder::where('category_id', $row->category_id)
+                                            ->where('product_id', $row->id)
+                                            ->where('status_id', 1)
+                                            ->sum('purchase_qty');
+
+                                        $soldQtyTotal = App\Models\InvoiceDetail::where('category_id', $row->category_id)
+                                            ->where('product_id', $row->id)
+                                            ->where('status_id', 1)
+                                            ->sum('sales_qty');
+
                                         $rowClass = "";
                                         if ($row->quantity < 5){
                                             $rowClass = "inactive";
@@ -66,6 +79,8 @@
                                         <td>{{ $row['supplier']['name'] }}</td>
                                         <td>{{ $row['unit']['name'] }}</td>
                                         <td>{{ $row['category']['name'] }}</td>
+                                        <td>{{ $purchaseQtyTotal }}</td>
+                                        <td>{{ $soldQtyTotal }}</td>
                                         <td>{{ $row->quantity }}</td>
                                     </tr>
                                 @endforeach

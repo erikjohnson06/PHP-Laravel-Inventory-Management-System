@@ -92,6 +92,15 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    public function viewPurchaseOrderDailyReport() : View {
+
+        $curr_date = (new DateTime)->format("m-d-y");
+
+        return view("modules.purchaseorders.purchaseorder_daily_report", [
+            "curr_date" => $curr_date
+        ]);
+    }
+
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -267,5 +276,44 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()->route("purchaseorder.approval")->with($notifications);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse|View
+     */
+    public function searchPurchaseOrderDataByDates(Request $request){
+
+        $start_date = DateTime::createFromFormat("Y-m-d", $request->start_date);  // date("Y-m-d", strtotime($request->start_date));
+        $end_date = DateTime::createFromFormat("Y-m-d", $request->end_date);
+
+        if (!$start_date || !$end_date){
+
+            $notifications = [
+                "message" => "Invalid Start or End Date",
+                "alert-type" => "error"
+            ];
+
+            return redirect()->back()->with($notifications);
+        }
+
+        if (intval($end_date->format("U")) < intval($start_date->format("U"))){
+            $notifications = [
+                "message" => "Start Date must precede End Date",
+                "alert-type" => "error"
+            ];
+
+            return redirect()->back()->with($notifications);
+        }
+
+        $data = PurchaseOrder::whereBetween("po_date", [$start_date->format("Y-m-d"), $end_date->format("Y-m-d")])
+                ->where("status_id", 1)
+                ->get();
+
+        return view("modules.pdf.purchaseorder_daily_report_pdf", [
+            "data" => $data,
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+        ]);
     }
 }

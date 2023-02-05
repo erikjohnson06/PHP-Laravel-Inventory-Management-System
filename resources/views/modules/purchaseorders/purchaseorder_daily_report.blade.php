@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-Easy Inventory | Daily Invoices
+Easy Inventory | Daily Purchase Orders
 @endsection
 
 @section('css')
@@ -22,16 +22,16 @@ Easy Inventory | Daily Invoices
                         <div class="row mb-3">
 
                             <div class="col-sm-10">
-                                <h4 class="card-title">Daily Invoice Report</h4>
+                                <h4 class="card-title">Purchase Order Invoice Report</h4>
                             </div>
                             <div class="col-sm-2">
-                                <a class="waves-effect waves-light float-end" href="{{ route('invoices.all') }}">
+                                <a class="waves-effect waves-light float-end" href="{{ route('purchaseorders.all') }}">
                                     <i class="ri-arrow-left-s-line "></i>&nbsp;Back
                                 </a>
                             </div>
                         </div>
 
-                        <form method="GET" action="{{ route('invoice.daily.search') }}" target="_blank" id="dailyReportForm">
+                        <form method="GET" action="{{ route('purchaseorder.daily.search') }}" target="_blank" id="dailyReportForm">
 
                             <div class="row">
 

@@ -40,6 +40,8 @@ class StockController extends Controller
                 ->where("status_id", 1)
                 ->get();
 
+
+
         return view("modules.stock.stock_status", [
             "data" => $data
         ]);
@@ -55,8 +57,11 @@ class StockController extends Controller
                 ->where("status_id", 1)
                 ->get();
 
+        $date = new DateTime('now', new DateTimeZone('America/New_York'));
+
         return view("modules.pdf.stock_status_pdf", [
-            "data" => $data
+            "data" => $data,
+            "date" => $date
         ]);
     }
 

@@ -82,6 +82,7 @@
                                     <li><a href="{{ route('purchaseorders.all') }}">View All</a></li>
                                     <li><a href="{{ route('purchaseorder.add') }}">Create New PO</a></li>
                                     <li><a href="{{ route('purchaseorder.approval') }}">Approve POs</a></li>
+                                    <li><a href="{{ route('purchaseorder.daily.report') }}">Daily Report</a></li>
                                 </ul>
                             </li>
 

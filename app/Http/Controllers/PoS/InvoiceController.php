@@ -364,6 +364,9 @@ class InvoiceController extends Controller
                 $invoiceDetails = InvoiceDetail::where('id', $k)->first();
                 $product = Product::where("id", $invoiceDetails->product_id)->first();
 
+                $invoiceDetails->status_id = 1;
+                $invoiceDetails->save();
+
                 $product->quantity = ((float) $product->quantity) - ((float) $val);
                 $product->save();
             }

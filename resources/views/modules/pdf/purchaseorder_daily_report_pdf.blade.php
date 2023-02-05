@@ -2,10 +2,14 @@
 @extends('admin.admin_master')
 
 @section('title')
-Easy Inventory | Stock Status Report
+Easy Inventory | Daily Purchase Order Report
 @endsection
 
 @section('admin')
+
+@php
+$total = 0;
+@endphp
 
 <div class="page-content">
     <div class="container-fluid">
@@ -14,7 +18,7 @@ Easy Inventory | Stock Status Report
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Stock Status Report</h4>
+                    <h4 class="mb-sm-0">Daily Purchase Order Report</h4>
                 </div>
             </div>
         </div>
@@ -26,42 +30,38 @@ Easy Inventory | Stock Status Report
                     <div class="card-body">
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="invoice-title">
                                     <h3>
                                         <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
-
-                            </div>
-                            <div class="col-6 text-end">
-                                <em>{{ $date->format('F j, Y, g:i a') }}</em>
                             </div>
                         </div>
 
                         <hr>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <address>
                                     <strong>Sale Dynamics</strong><br>
                                     Knoxville, TN<br>
                                     support@salesdynamics.com
                                 </address>
                             </div>
-                            <div class="col-6 text-end">
-                                <address>
-
-                                </address>
-                            </div>
                         </div>
 
                         <hr>
-
                         <div class="row">
                             <div class="col-12">
                                 <div>
                                     <div class="p-2">
-
+                                        <h3 class="font-size-16">
+                                            <strong>Report Summary
+                                                <span class="btn btn-primary">{{ $start_date->format('m-d-Y') }}</span>
+                                                -
+                                                <span class="btn btn-primary">{{ $end_date->format('m-d-Y') }}</span>
+                                            </strong>
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -75,14 +75,13 @@ Easy Inventory | Stock Status Report
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <td class="text-center"><strong>ID</strong></td>
+                                                        <td></td>
+                                                        <td class="text-center"><strong>PO #</strong></td>
+                                                        <td class="text-center"><strong>PO Date</strong></td>
                                                         <td class="text-center"><strong>Product</strong></td>
-                                                        <td class="text-center"><strong>Supplier</strong></td>
-                                                        <td class="text-center"><strong>Unit</strong></td>
-                                                        <td class="text-center"><strong>Category</strong></td>
-                                                        <td class="text-center"><strong>Purchased</strong></td>
-                                                        <td class="text-center"><strong>Sold</strong></td>
-                                                        <td class="text-center"><strong>On Hand</strong></td>
+                                                        <td class="text-center"><strong>Qty</strong></td>
+                                                        <td class="text-center"><strong>Unit Price</strong></td>
+                                                        <td class="text-end"><strong>Total Price</strong></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -90,29 +89,27 @@ Easy Inventory | Stock Status Report
                                                     @foreach($data as $k => $row)
 
                                                         @php
-                                                        $purchaseQtyTotal = App\Models\PurchaseOrder::where('category_id', $row->category_id)
-                                                            ->where('product_id', $row->id)
-                                                            ->where('status_id', 1)
-                                                            ->sum('purchase_qty');
-
-                                                        $soldQtyTotal = App\Models\InvoiceDetail::where('category_id', $row->category_id)
-                                                            ->where('product_id', $row->id)
-                                                            ->where('status_id', 1)
-                                                            ->sum('sales_qty');
+                                                        $total += $row->purchase_price;
                                                         @endphp
 
                                                         <tr>
-                                                            <td class="text-center">{{ $row->id }}</td>
-                                                            <td>{{ $row->name }}</td>
-                                                            <td class="text-center">{{ $row['supplier']['name'] }}</td>
-                                                            <td class="text-center">{{ $row['unit']['name'] }}</td>
-                                                            <td class="text-center">{{ $row['category']['name'] }}</td>
-                                                            <td class="text-center">{{ $purchaseQtyTotal }}</td>
-                                                            <td class="text-center">{{ $soldQtyTotal }}</td>
-                                                            <td class="text-center">{{ $row->quantity }}</td>
+                                                            <td class="text-center">{{ $k + 1 }}</td>
+                                                            <td class="text-center">{{ $row->po_number }}</td>
+                                                            <td class="text-center">{{      date('m/d/Y', strtotime($row->po_date)) }}</td>
+                                                            <td>{{ $row['product']['id'] }} - {{ $row['product']['name'] }}</td>
+                                                            <td class="text-center">{{ $row->purchase_qty }} ({{ $row['product']['unit']['name'] }})</td>
+                                                            <td class="text-center">{{ number_format($row->unit_price, 2) }}</td>
+                                                            <td class="text-end">{{ number_format($row->purchase_price, 2) }}</td>
                                                         </tr>
+
                                                     @endforeach()
 
+                                                    <tr>
+                                                        <td class="thick-line" colspan="5"></td>
+                                                        <td class="thick-line text-center">
+                                                            <strong>Invoice Total</strong></td>
+                                                        <td class="no-line text-end"><h4 class="m-0">${{ number_format($total, 2) }}</h4></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
