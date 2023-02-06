@@ -4,28 +4,28 @@ namespace App\Http\Controllers\PoS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Customer;
-use App\Models\Invoice;
-use App\Models\InvoiceStatus;
-use App\Models\InvoiceDetail;
-use App\Models\Payment;
-use App\Models\PaymentDetail;
-use App\Models\PaymentStatus;
+//use App\Models\Customer;
+//use App\Models\Invoice;
+//use App\Models\InvoiceStatus;
+//use App\Models\InvoiceDetail;
+//use App\Models\Payment;
+//use App\Models\PaymentDetail;
+//use App\Models\PaymentStatus;
 use App\Models\Product;
-use App\Models\ProductStatus;
-use App\Models\PurchaseOrder;
-use App\Models\PurchaseOrderStatus;
+//use App\Models\ProductStatus;
+//use App\Models\PurchaseOrder;
+//use App\Models\PurchaseOrderStatus;
 use App\Models\Supplier;
-use App\Models\Unit;
+//use App\Models\Unit;
 use DateTime;
 use DateTimeZone;
-use Exception;
-use Illuminate\Http\RedirectResponse;
+//use Exception;
+//use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Http\Response;
+//use Illuminate\Support\Carbon;
+//use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class StockController extends Controller
@@ -39,8 +39,6 @@ class StockController extends Controller
                 ->orderBy('category_id','ASC')
                 ->where("status_id", 1)
                 ->get();
-
-
 
         return view("modules.stock.stock_status", [
             "data" => $data

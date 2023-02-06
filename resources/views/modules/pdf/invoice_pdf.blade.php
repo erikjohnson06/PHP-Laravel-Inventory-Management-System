@@ -59,10 +59,8 @@ $subtotal = 0;
                                         </address>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <address>
                                             <strong>Invoice Date:</strong><br>
                                             {{ date('n/j/y', strtotime($invoice->invoice_date)) }}<br><br>
-                                        </address>
                                     </div>
                                 </div>
 

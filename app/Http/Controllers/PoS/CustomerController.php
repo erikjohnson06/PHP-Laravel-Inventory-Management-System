@@ -5,6 +5,11 @@ namespace App\Http\Controllers\PoS;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerStatus;
+use App\Models\InvoiceDetail;
+use App\Models\Payment;
+use App\Models\PaymentStatus;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,6 +30,56 @@ class CustomerController extends Controller
 
         return view("modules.customers.customers_all", [
             "data" => $data
+        ]);
+    }
+
+    /**
+     * @return View
+     */
+    public function viewCreditCustomersAll() : View {
+
+        $data = Payment::whereIn("status_id", [2,3])->get();
+
+        return view("modules.customers.credit_customers_all", [
+            "data" => $data
+        ]);
+    }
+
+    /**
+     * @param int $invoice_id
+     * @return View
+     */
+    public function viewEditCustomerInvoice(int $invoice_id) : View {
+
+        $payment = Payment::where("invoice_id", (int) $invoice_id)->first();
+
+        $payment_statuses = PaymentStatus::whereIn("id", [1,3])->orderBy('id','ASC')->get();
+
+        $inv_details = InvoiceDetail::where('invoice_id', (int) $invoice_id)->get();
+
+        $curr_date = (new DateTime)->format("m-d-Y");
+
+        return view("modules.customers.edit_customer_invoice", [
+            "curr_date" => $curr_date,
+            "inv_details" => $inv_details,
+            "payment" => $payment,
+            "payment_statuses" => $payment_statuses
+        ]);
+    }
+
+
+    /**
+     * @return View
+     */
+    public function viewPrintCreditCustomersAll() : View {
+
+        $data = Payment::whereIn("status_id", [2,3])->get();
+
+        $date = new DateTime('now', new DateTimeZone('America/New_York'));
+
+        return view("modules.pdf.credit_customers_all_pdf", [
+            "data" => $data,
+            "date" => $date
         ]);
     }
 
@@ -172,5 +227,32 @@ class CustomerController extends Controller
         ];
 
         return redirect()->route("customers.all")->with($notifications);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $invoice_id
+     * @return RedirectResponse
+     */
+    public function updateCustomerInvoice(Request $request, int $invoice_id) : RedirectResponse {
+
+        $payment = Payment::where("invoice_id", (int) $invoice_id)->first();
+
+        if ($payment->due_amount < $request->payment_amount){
+
+            $notifications = [
+                "message" => "Whoops.. You cannot pay more than the due amount ($" . number_format($payment->due_amount, 2) . ")",
+                "alert-type" => "error"
+            ];
+
+            redirect()->back()->with($notifications);
+        }
+
+        $notifications = [
+            "message" => "...",
+            "alert-type" => "success"
+        ];
+
+        return redirect()->route("customers.credit")->with($notifications);
     }
 }
