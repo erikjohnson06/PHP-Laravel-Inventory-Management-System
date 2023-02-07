@@ -166,13 +166,13 @@ $subtotal = 0;
                                                 </div>
                                                 <div class="form-group col-md-3">
 
-                                                    <label for="invoice_date" class="form-label">Date</label>
+                                                    <label for="payment_date" class="form-label">Date</label>
                                                     <input class="form-control"
                                                            type="date"
-                                                           name="invoice_date"
+                                                           name="payment_date"
                                                            value="{{ $curr_date }}"
-                                                           id="invoice_date"
-                                                           placeholder="MM-DD-YYYY"
+                                                           id="payment_date"
+                                                           placeholder="MM/DD/YYYY"
                                                            />
                                                 </div>
                                                 <div class="form-group col-md-3">

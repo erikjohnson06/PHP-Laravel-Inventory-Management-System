@@ -231,6 +231,7 @@ class InvoiceController extends Controller
                 $paymentDetails = new PaymentDetail;
                 $paymentDetails->invoice_id = $invoice->invoice_no;
                 $paymentDetails->payment_date = $invoice->invoice_date;
+                $paymentDetails->updated_by = Auth::user()->id;
 
                 //Full payments
                 if ($payment->status_id === 1){
@@ -255,7 +256,6 @@ class InvoiceController extends Controller
                 }
 
                 $payment->save();
-
                 $paymentDetails->save();
             }
         });

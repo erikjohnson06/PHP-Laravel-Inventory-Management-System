@@ -63,7 +63,7 @@ Easy Inventory | Credit Customers
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <a href="{{ route('customer.delete', $row['invoice']['id']) }}" class="btn btn-warning sm" title="Customer Invoice Details">
+                                        <a href="{{ route('customer.edit.invoice',$row->invoice_id) }}" class="btn btn-warning sm" title="Customer Invoice Details">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>

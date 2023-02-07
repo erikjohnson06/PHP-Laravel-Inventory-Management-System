@@ -7,9 +7,11 @@ use App\Models\Customer;
 use App\Models\CustomerStatus;
 use App\Models\InvoiceDetail;
 use App\Models\Payment;
+use App\Models\PaymentDetail;
 use App\Models\PaymentStatus;
 use DateTime;
 use DateTimeZone;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -57,7 +59,7 @@ class CustomerController extends Controller
 
         $inv_details = InvoiceDetail::where('invoice_id', (int) $invoice_id)->get();
 
-        $curr_date = (new DateTime)->format("m-d-Y");
+        $curr_date = (new DateTime)->format("m/d/Y");
 
         return view("modules.customers.edit_customer_invoice", [
             "curr_date" => $curr_date,
@@ -236,20 +238,67 @@ class CustomerController extends Controller
      */
     public function updateCustomerInvoice(Request $request, int $invoice_id) : RedirectResponse {
 
+        //dd($request);
+
         $payment = Payment::where("invoice_id", (int) $invoice_id)->first();
 
-        if ($payment->due_amount < $request->payment_amount){
+        $request->payment_amount = (float) preg_replace("/[,]/", "", $request->payment_amount); //Remove commas before casting to float
+
+        try {
+
+            if (!$payment){
+                throw new Exception("Whoops.. an unexected error has occurred. Unable to find the necessary payment data.");
+            }
+
+            if ($request->payment_status == "3" && (is_nan($request->payment_amount) || $request->payment_amount <= 0)){
+                throw new Exception("Whoops.. Please enter a valid payment amount.");
+            }
+
+            if ($request->payment_amount && $request->payment_amount > $payment->due_amount){
+                throw new Exception("Whoops.. You cannot pay more than the due amount ($" . number_format($payment->due_amount, 2) . ")");
+            }
+        }
+        catch (Exception $ex) {
 
             $notifications = [
-                "message" => "Whoops.. You cannot pay more than the due amount ($" . number_format($payment->due_amount, 2) . ")",
+                "message" => $ex->getMessage(),
                 "alert-type" => "error"
             ];
 
-            redirect()->back()->with($notifications);
+            return redirect()->back()->with($notifications);
         }
 
+        //Save new payment data
+        $paymentDetails = new PaymentDetail();
+        $paymentDetails->invoice_id = $payment->invoice_id;
+        $paymentDetails->payment_date = (new DateTime)->format('Y-m-d');
+        $paymentDetails->updated_by = Auth::user()->id;
+
+        $payment->status_id = (int) $request->payment_status;
+
+        //Paid in Full
+        if ($payment->status_id === 1){
+
+            //Calculate new paid and due amounts
+            $paymentDetails->current_paid_amount = $payment->due_amount;
+
+            $payment->payment_amount = ($payment->payment_amount + $payment->due_amount);
+            $payment->due_amount = 0;
+        }
+        //Partial Payment
+        else if ($payment->status_id === 3){
+
+            $paymentDetails->current_paid_amount = (float) $request->payment_amount;
+
+            $payment->payment_amount = (float) ($payment->payment_amount + (float) $request->payment_amount);
+            $payment->due_amount = (float) ($payment->due_amount - (float) $request->payment_amount);
+        }
+
+        $payment->save();
+        $paymentDetails->save();
+
         $notifications = [
-            "message" => "...",
+            "message" => "Invoice Updated",
             "alert-type" => "success"
         ];
 
