@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-Easy Inventory | Credit Customer Report
+Easy Inventory | {{ $title }}
 @endsection
 
 @section('admin')
@@ -18,7 +18,7 @@ $inv_total = 0;
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Credit Customer  Report</h4>
+                    <h4 class="mb-sm-0">{{ $title }}</h4>
                 </div>
             </div>
         </div>

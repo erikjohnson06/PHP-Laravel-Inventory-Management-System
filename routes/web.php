@@ -58,6 +58,9 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/customers/credit/print', 'viewPrintCreditCustomersAll')->name('credit.customers.print.pdf');
         Route::get('/customers/edit/invoice/{invoice_id}', 'viewEditCustomerInvoice')->name('customer.edit.invoice');
         Route::post('/customers/update/invoice/{invoice_id}', 'updateCustomerInvoice')->name('customer.update.invoice');
+        Route::get('/customers/invoice/details/{invoice_id}', 'viewCustomerInvoiceDetails')->name('customer.invoice.details');
+        Route::get('/customers/paid', 'viewPaidCustomersAll')->name('customers.paid');
+        Route::get('/customers/paid/print', 'viewPrintPaidCustomersAll')->name('paid.customers.print.pdf');
     });
 
     Route::controller(ProductController::class)->group(function () {

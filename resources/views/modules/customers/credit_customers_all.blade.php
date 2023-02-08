@@ -39,7 +39,7 @@ Easy Inventory | Credit Customers
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th></th>
                                     <th>Customer Name</th>
                                     <th>Invoice #</th>
                                     <th>Date</th>
@@ -54,7 +54,7 @@ Easy Inventory | Credit Customers
 
                                 <tr>
                                     <td>{{ $k + 1 }}</td>
-                                    <td>{{ $row['customer']['name'] }}</td>
+                                    <td>{{ $row['customer']['name'] }} ({{ $row['customer']['id'] }})</td>
                                     <td>{{ $row['invoice']['invoice_no'] }}</td>
                                     <td>{{ date('n/j/Y', strtotime($row['invoice']['invoice_date'])) }}</td>
                                     <td>${{ number_format($row->due_amount, 2) }}</td>
@@ -63,7 +63,7 @@ Easy Inventory | Credit Customers
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <a href="{{ route('customer.edit.invoice',$row->invoice_id) }}" class="btn btn-warning sm" title="Customer Invoice Details">
+                                        <a href="{{ route('customer.invoice.details',$row->invoice_id) }}" class="btn btn-info sm" title="Customer Invoice Details" target="_blank">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>

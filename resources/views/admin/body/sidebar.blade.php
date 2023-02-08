@@ -37,6 +37,7 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('customers.all') }}">All Customers</a></li>
                                     <li><a href="{{ route('customers.credit') }}">Credit Customers</a></li>
+                                    <li><a href="{{ route('customers.paid') }}">Zero-Balance Customers</a></li>
                                     <li><a href="{{ route('customer.add') }}">Add New</a></li>
                                 </ul>
                             </li>

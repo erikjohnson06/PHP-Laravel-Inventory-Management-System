@@ -40,9 +40,21 @@ class CustomerController extends Controller
      */
     public function viewCreditCustomersAll() : View {
 
-        $data = Payment::whereIn("status_id", [2,3])->get();
+        $data = Payment::where("due_amount", ">", 0)->get();
 
         return view("modules.customers.credit_customers_all", [
+            "data" => $data
+        ]);
+    }
+
+    /**
+     * @return View
+     */
+    public function viewPaidCustomersAll() : View {
+
+        $data = Payment::where("due_amount", 0)->get();
+
+        return view("modules.customers.paid_customers_all", [
             "data" => $data
         ]);
     }
@@ -53,11 +65,11 @@ class CustomerController extends Controller
      */
     public function viewEditCustomerInvoice(int $invoice_id) : View {
 
-        $payment = Payment::where("invoice_id", (int) $invoice_id)->first();
+        $payment = Payment::where("invoice_id", $invoice_id)->first();
 
         $payment_statuses = PaymentStatus::whereIn("id", [1,3])->orderBy('id','ASC')->get();
 
-        $inv_details = InvoiceDetail::where('invoice_id', (int) $invoice_id)->get();
+        $inv_details = InvoiceDetail::where('invoice_id', $invoice_id)->get();
 
         $curr_date = (new DateTime)->format("m/d/Y");
 
@@ -69,19 +81,58 @@ class CustomerController extends Controller
         ]);
     }
 
+    /**
+     * @param int $invoice_id
+     * @return View
+     */
+    public function viewCustomerInvoiceDetails(int $invoice_id) : View {
+
+        $payment = Payment::where("invoice_id", $invoice_id)->first();
+
+        $payment_details = PaymentDetail::where("invoice_id", $invoice_id)->orderBy("created_at", "ASC")->get();
+
+        $inv_details = InvoiceDetail::where('invoice_id', $invoice_id)->get();
+
+        return view("modules.pdf.customer_invoice_details_pdf", [
+            "inv_details" => $inv_details,
+            "payment_details" => $payment_details,
+            "payment" => $payment
+        ]);
+    }
 
     /**
      * @return View
      */
     public function viewPrintCreditCustomersAll() : View {
 
-        $data = Payment::whereIn("status_id", [2,3])->get();
+        $data = Payment::where("due_amount", ">", 0)->get();
 
         $date = new DateTime('now', new DateTimeZone('America/New_York'));
 
-        return view("modules.pdf.credit_customers_all_pdf", [
+        $title = "Invoices Due";
+
+        return view("modules.pdf.customer_invoice_all_pdf", [
             "data" => $data,
-            "date" => $date
+            "date" => $date,
+            "title" => $title
+        ]);
+    }
+
+    /**
+     * @return View
+     */
+    public function viewPrintPaidCustomersAll() : View {
+
+        $data = Payment::where("due_amount", 0)->get();
+
+        $date = new DateTime('now', new DateTimeZone('America/New_York'));
+
+        $title = "Invoices Paid in Full";
+
+        return view("modules.pdf.customer_invoice_all_pdf", [
+            "data" => $data,
+            "date" => $date,
+            "title" => $title
         ]);
     }
 
