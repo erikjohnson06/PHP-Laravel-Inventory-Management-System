@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStatus;
 use App\Models\PurchaseOrder;
-use App\Models\PurchaseOrderStatus;
 use App\Models\Supplier;
 use App\Models\Unit;
 use DateTime;
@@ -18,15 +17,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class PurchaseOrderController extends Controller
-{
+class PurchaseOrderController extends Controller {
+
     /**
      * @return View
      */
-    public function viewPurchaseOrdersAll() : View {
+    public function viewPurchaseOrdersAll(): View {
 
-        $data = PurchaseOrder::orderBy('po_date','DESC')
-                ->orderBy('id','DESC')
+        $data = PurchaseOrder::orderBy('po_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->get();
 
         return view("modules.purchaseorders.purchaseorders_all", [
@@ -37,7 +36,7 @@ class PurchaseOrderController extends Controller
     /**
      * @return View
      */
-    public function viewAddPurchaseOrder() : View {
+    public function viewAddPurchaseOrder(): View {
 
         $suppliers = Supplier::where('status_id', 1)
                 ->orderBy('id', 'ASC')
@@ -51,11 +50,10 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
-
     /**
      * @return View
      */
-    public function viewEditPurchaseOrder(int $id) : View {
+    public function viewEditPurchaseOrder(int $id): View {
 
         $data = Product::findOrFail($id);
 
@@ -80,11 +78,11 @@ class PurchaseOrderController extends Controller
     /**
      * @return View
      */
-    public function viewPurchaseOrdersApproval() : View {
+    public function viewPurchaseOrdersApproval(): View {
 
         $data = PurchaseOrder::where("status_id", 0)
-                ->orderBy('po_date','DESC')
-                ->orderBy('id','DESC')
+                ->orderBy('po_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->get();
 
         return view("modules.purchaseorders.purchaseorders_approve", [
@@ -92,7 +90,7 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
-    public function viewPurchaseOrderDailyReport() : View {
+    public function viewPurchaseOrderDailyReport(): View {
 
         $curr_date = (new DateTime)->format("m-d-y");
 
@@ -105,13 +103,13 @@ class PurchaseOrderController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function createPurchaseOrder(Request $request) : RedirectResponse {
+    public function createPurchaseOrder(Request $request): RedirectResponse {
 
         $notifications = [];
 
         //dd($request->po_date);
 
-        if ($request->product_id == null){
+        if ($request->product_id == null) {
 
             $notifications = [
                 "message" => "No products have been entered",
@@ -119,13 +117,13 @@ class PurchaseOrderController extends Controller
             ];
         }
 
-        if ($notifications){
+        if ($notifications) {
             return redirect()->back()->with($notifications);
         }
 
         $itemCount = count($request->product_id);
 
-        for ($i = 0; $i < $itemCount; $i++){
+        for ($i = 0; $i < $itemCount; $i++) {
 
             $purchaseOrder = new PurchaseOrder;
             $purchaseOrder->po_date = date("Y-m-d", strtotime($request->po_date[$i]));
@@ -136,10 +134,10 @@ class PurchaseOrderController extends Controller
             $purchaseOrder->category_id = (int) $request->category_id[$i];
             $purchaseOrder->purchase_qty = (float) $request->purchase_qty[$i];
             $purchaseOrder->unit_price = (float) $request->unit_price[$i];
-            $purchaseOrder->purchase_price = (float)$request->purchase_price[$i];
+            $purchaseOrder->purchase_price = (float) $request->purchase_price[$i];
             $purchaseOrder->status_id = 0;
-            $purchaseOrder->created_by =  Auth::user()->id;
-            $purchaseOrder->created_at =  Carbon::now();
+            $purchaseOrder->created_by = Auth::user()->id;
+            $purchaseOrder->created_at = Carbon::now();
 
             $purchaseOrder->save();
         }
@@ -156,11 +154,11 @@ class PurchaseOrderController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function deletePurchaseOrder(int $id) : RedirectResponse {
+    public function deletePurchaseOrder(int $id): RedirectResponse {
 
         $data = PurchaseOrder::findOrFail($id);
 
-        if (!$data){
+        if (!$data) {
 
             $notifications = [
                 "message" => "Purchase Order Not Found",
@@ -170,7 +168,7 @@ class PurchaseOrderController extends Controller
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0){
+        if ($data->status_id !== 0) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Deleted.",
@@ -194,11 +192,11 @@ class PurchaseOrderController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function cancelPurchaseOrder(int $id) : RedirectResponse {
+    public function cancelPurchaseOrder(int $id): RedirectResponse {
 
         $data = PurchaseOrder::findOrFail($id);
 
-        if (!$data){
+        if (!$data) {
 
             $notifications = [
                 "message" => "Purchase Order Not Found",
@@ -208,7 +206,7 @@ class PurchaseOrderController extends Controller
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0){
+        if ($data->status_id !== 0) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Canceled.",
@@ -233,13 +231,13 @@ class PurchaseOrderController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function approvePurchaseOrder(int $id) : RedirectResponse {
+    public function approvePurchaseOrder(int $id): RedirectResponse {
 
         $data = PurchaseOrder::findOrFail($id);
 
         $notifications = [];
 
-        if (!$data){
+        if (!$data) {
 
             $notifications = [
                 "message" => "Purchase Order Not Found",
@@ -249,7 +247,7 @@ class PurchaseOrderController extends Controller
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0){
+        if ($data->status_id !== 0) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Deleted.",
@@ -261,11 +259,11 @@ class PurchaseOrderController extends Controller
 
         $product = Product::where('id', $data->product_id)->first();
 
-        $purchase_qty = (float) $data->purchase_qty + (float) $product->quantity ;
+        $purchase_qty = (float) $data->purchase_qty + (float) $product->quantity;
 
         $product->quantity = $purchase_qty;
 
-        if ($product->save()){
+        if ($product->save()) {
             $data->status_id = 1;
             $data->save();
 
@@ -282,12 +280,12 @@ class PurchaseOrderController extends Controller
      * @param Request $request
      * @return RedirectResponse|View
      */
-    public function searchPurchaseOrderDataByDates(Request $request){
+    public function searchPurchaseOrderDataByDates(Request $request) {
 
         $start_date = DateTime::createFromFormat("Y-m-d", $request->start_date);  // date("Y-m-d", strtotime($request->start_date));
         $end_date = DateTime::createFromFormat("Y-m-d", $request->end_date);
 
-        if (!$start_date || !$end_date){
+        if (!$start_date || !$end_date) {
 
             $notifications = [
                 "message" => "Invalid Start or End Date",
@@ -297,7 +295,7 @@ class PurchaseOrderController extends Controller
             return redirect()->back()->with($notifications);
         }
 
-        if (intval($end_date->format("U")) < intval($start_date->format("U"))){
+        if (intval($end_date->format("U")) < intval($start_date->format("U"))) {
             $notifications = [
                 "message" => "Start Date must precede End Date",
                 "alert-type" => "error"

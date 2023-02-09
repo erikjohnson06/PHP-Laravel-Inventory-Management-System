@@ -21,14 +21,7 @@ $subtotal = 0;
                     <h4 class="mb-sm-0">Invoice</h4>
 
                     <div class="page-title-right">
-
                         <a href="{{ route('invoices.all') }}"><i class="ri-arrow-left-s-line"></i>&nbsp;Back</a>
-
-                        <!--
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item active"><a href="{{ route('invoices.all') }}">Back</a></li>
-                        </ol>
-                        -->
                     </div>
 
                 </div>
@@ -46,7 +39,7 @@ $subtotal = 0;
                                 <div class="invoice-title">
                                     <h4 class="float-end font-size-16"><strong>Invoice # {{ $invoice->invoice_no }}</strong></h4>
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
                                 <hr>
@@ -59,8 +52,8 @@ $subtotal = 0;
                                         </address>
                                     </div>
                                     <div class="col-6 text-end">
-                                            <strong>Invoice Date:</strong><br>
-                                            {{ date('n/j/y', strtotime($invoice->invoice_date)) }}<br><br>
+                                        <strong>Invoice Date:</strong><br>
+                                        {{ date('n/j/y', strtotime($invoice->invoice_date)) }}<br><br>
                                     </div>
                                 </div>
 

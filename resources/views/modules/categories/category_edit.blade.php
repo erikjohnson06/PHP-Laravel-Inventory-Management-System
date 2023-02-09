@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Edit Category
+Easy Inventory | Edit Category
 @endsection
 
 @section('admin')
@@ -42,7 +42,7 @@
                                 <div class="col-sm-10">
                                     <select name="status_id" class="form-select" aria-label="Status">
                                         @foreach($statuses as $option)
-                                            <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
+                                        <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -67,26 +67,26 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         $("form#categoryAddForm").validate({
-            rules : {
-                name : {required : true}
+            rules: {
+                name: {required: true}
             },
-            messages : {
-                name : {
-                    required : "Please Enter a Category Name"
+            messages: {
+                name: {
+                    required: "Please Enter a Category Name"
                 }
             },
-            errorElement : "span",
-            errorPlacement : function(error, element){
+            errorElement: "span",
+            errorPlacement: function (error, element) {
                 error.addClass("invalid-feedback");
                 element.closest(".form-group").append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function (element, errorClass, validClass) {
                 $(element).addClass("is-invalid");
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass("is-invalid");
             }
         });

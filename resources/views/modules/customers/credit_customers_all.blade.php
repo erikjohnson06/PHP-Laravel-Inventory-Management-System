@@ -32,8 +32,6 @@ Easy Inventory | Credit Customers
                         <br />
                         <br />
 
-                        <!--<h4 class="card-title">Credit Customers</h4>-->
-
                         <table id="datatable"
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">

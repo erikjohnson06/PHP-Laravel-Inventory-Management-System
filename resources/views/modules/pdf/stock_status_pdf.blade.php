@@ -29,7 +29,7 @@ Easy Inventory | Stock Status Report
                             <div class="col-6">
                                 <div class="invoice-title">
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
 
@@ -89,28 +89,28 @@ Easy Inventory | Stock Status Report
 
                                                     @foreach($data as $k => $row)
 
-                                                        @php
-                                                        $purchaseQtyTotal = App\Models\PurchaseOrder::where('category_id', $row->category_id)
-                                                            ->where('product_id', $row->id)
-                                                            ->where('status_id', 1)
-                                                            ->sum('purchase_qty');
+                                                    @php
+                                                    $purchaseQtyTotal = App\Models\PurchaseOrder::where('category_id', $row->category_id)
+                                                    ->where('product_id', $row->id)
+                                                    ->where('status_id', 1)
+                                                    ->sum('purchase_qty');
 
-                                                        $soldQtyTotal = App\Models\InvoiceDetail::where('category_id', $row->category_id)
-                                                            ->where('product_id', $row->id)
-                                                            ->where('status_id', 1)
-                                                            ->sum('sales_qty');
-                                                        @endphp
+                                                    $soldQtyTotal = App\Models\InvoiceDetail::where('category_id', $row->category_id)
+                                                    ->where('product_id', $row->id)
+                                                    ->where('status_id', 1)
+                                                    ->sum('sales_qty');
+                                                    @endphp
 
-                                                        <tr>
-                                                            <td class="text-center">{{ $row->id }}</td>
-                                                            <td>{{ $row->name }}</td>
-                                                            <td class="text-center">{{ $row['supplier']['name'] }}</td>
-                                                            <td class="text-center">{{ $row['unit']['name'] }}</td>
-                                                            <td class="text-center">{{ $row['category']['name'] }}</td>
-                                                            <td class="text-center">{{ $purchaseQtyTotal }}</td>
-                                                            <td class="text-center">{{ $soldQtyTotal }}</td>
-                                                            <td class="text-center">{{ $row->quantity }}</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td class="text-center">{{ $row->id }}</td>
+                                                        <td>{{ $row->name }}</td>
+                                                        <td class="text-center">{{ $row['supplier']['name'] }}</td>
+                                                        <td class="text-center">{{ $row['unit']['name'] }}</td>
+                                                        <td class="text-center">{{ $row['category']['name'] }}</td>
+                                                        <td class="text-center">{{ $purchaseQtyTotal }}</td>
+                                                        <td class="text-center">{{ $soldQtyTotal }}</td>
+                                                        <td class="text-center">{{ $row->quantity }}</td>
+                                                    </tr>
                                                     @endforeach()
 
                                                 </tbody>

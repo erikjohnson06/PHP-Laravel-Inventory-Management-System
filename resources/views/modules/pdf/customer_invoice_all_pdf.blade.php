@@ -33,7 +33,7 @@ $inv_total = 0;
                             <div class="col-6">
                                 <div class="invoice-title">
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
                             </div>
@@ -72,6 +72,9 @@ $inv_total = 0;
                                                 </thead>
                                                 <tbody>
 
+
+                                                    @if (count($data) > 0)
+
                                                     @foreach($data as $k => $row)
 
                                                     @php
@@ -87,6 +90,12 @@ $inv_total = 0;
                                                     </tr>
 
                                                     @endforeach()
+
+                                                    @else
+                                                    <tr>
+                                                        <td class="text-center"colspan="5">No History Found</td>
+                                                    </tr>
+                                                    @endif
 
                                                     <tr>
                                                         <td class="thick-line" colspan="3"></td>

@@ -49,30 +49,30 @@ Easy Inventory | Invoices
 
                                 @foreach($data as $row)
 
-                                    @php
-                                    $rowClass = "";
+                                @php
+                                $rowClass = "";
 
-                                    if ($row->status_id == 0){
-                                    $rowClass = "onHold";
-                                    }
-                                    else if ($row->status_id == 1){
-                                    $rowClass = "approved";
-                                    }
+                                if ($row->status_id == 0){
+                                $rowClass = "onHold";
+                                }
+                                else if ($row->status_id == 1){
+                                $rowClass = "approved";
+                                }
 
-                                    $totalAmount = "$" . number_format($row['payment']['total_amount'], 2);
-                                    @endphp
+                                $totalAmount = "$" . number_format($row['payment']['total_amount'], 2);
+                                @endphp
 
-                                    <tr class='{{ $rowClass }}'>
-                                        <td>{{ $row->invoice_no }}</td>
-                                        <td>{{ $row['payment']['customer']['name'] }}</td>
-                                        <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
-                                        <td class="align-right">{{ $totalAmount }}</td>
-                                        <td>
-                                            <a href="{{ route('invoice.print', $row->id) }}" class="btn btn-primary sm" title="Print Invoice">
-                                                <i class="fa fa-print"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr class='{{ $rowClass }}'>
+                                    <td>{{ $row->invoice_no }}</td>
+                                    <td>{{ $row['payment']['customer']['name'] }}</td>
+                                    <td>{{ date('n/j/Y', strtotime($row->invoice_date)) }}</td>
+                                    <td class="align-right">{{ $totalAmount }}</td>
+                                    <td>
+                                        <a href="{{ route('invoice.print', $row->id) }}" class="btn btn-primary sm" title="Print Invoice">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

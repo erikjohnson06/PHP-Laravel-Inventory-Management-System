@@ -6,7 +6,7 @@ Easy Inventory | Supplier Product Report
 @endsection
 
 @section('css')
-    <link href="{{ asset('backend/assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('admin')
@@ -28,11 +28,6 @@ Easy Inventory | Supplier Product Report
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <!--
-                                                <a class="btn btn-link btn-rounded waves-effect waves-light float-end" target="_blank" href="{{ route('stock.status.pdf') }}">
-                                                    <i class="fa fa-print"></i>&nbsp;Print
-                                                </a>
-                        -->
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <label for="supplier">Supplier Report</label>
@@ -55,7 +50,7 @@ Easy Inventory | Supplier Product Report
 
                                                 <option value="">---</option>
                                                 @foreach($suppliers as $option)
-                                                    <option value="{{ $option->id }}">{{ $option->name }}</option>
+                                                <option value="{{ $option->id }}">{{ $option->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -79,7 +74,7 @@ Easy Inventory | Supplier Product Report
                                                 <option value="">---</option>
 
                                                 @foreach($categories as $option)
-                                                    <option value="{{ $option->id }}">{{ $option->name }}</option>
+                                                <option value="{{ $option->id }}">{{ $option->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -111,90 +106,89 @@ Easy Inventory | Supplier Product Report
 @section('javascript')
 
 <!-- Select 2 -->
-<script type="text/javascript" src="{{ asset('backend/assets/libs/select2/js/select2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('backend/assets/js/pages/form-advanced.init.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+$(document).ready(function () {
 
-        $("form#selectBySupplier").validate({
-            rules : {
-                supplier_id : {required : true}
+    $("form#selectBySupplier").validate({
+        rules: {
+            supplier_id: {required: true}
 
-            },
-            messages : {
-                supplier_id : {
-                    required : "Please Select a Supplier"
-                }
-            },
-            errorElement : "span",
-            errorPlacement : function(error, element){
-                error.addClass("invalid-feedback");
-                element.closest(".form-group").append(error);
-            },
-            highlight : function(element, errorClass, validClass){
-                $(element).addClass("is-invalid");
-            },
-            unhighlight : function(element, errorClass, validClass){
-                $(element).removeClass("is-invalid");
+        },
+        messages: {
+            supplier_id: {
+                required: "Please Select a Supplier"
             }
-        });
-
-        $(document).on("change", "input.toggle_report_mode", function () {
-
-            var id = $(this).val();
-
-            var supplier_div = $("div.supplier_selection");
-            var product_div = $("div.product_selection");
-
-            if (id == "supplier"){
-                product_div.addClass("hide");
-                supplier_div.removeClass("hide");
-            }
-            else {
-                supplier_div.addClass("hide");
-                product_div.removeClass("hide");
-            }
-        });
-
-        $(document).on("change", "select#category_id", function () {
-
-            var categoryId = $(this).val();
-            var productSelect = $("select#product_id");
-            var html;
-
-            productSelect.val("");
-
-            $.ajax({
-                url: "{{ route('get-products-by-category') }}",
-                type: "GET",
-                data: {category_id: categoryId},
-                success: function (data) {
-
-                    console.log(data);
-
-                    if (!data || !data.length) {
-                        html = "<option value=''>No Products Available</option>";
-                        productSelect.html(html);
-                        return;
-                    }
-
-                    html = "<option value=''>Select Product</option>";
-
-                    $.each(data, function (key, val) {
-                        html += "<option value='" + val.id + "'>" + val.name + "</option>";
-                    });
-
-                    productSelect.html(html);
-                }
-            });
-        });
-
-        $("div.supplier_selection").find("span.select2.select2-container").css({width: "100%"}); //Select collapse when hidden. Expand to full width
-        $("div.product_selection").find("span.select2.select2-container").css({width: "100%"});
-        $("input.toggle_report_mode").prop("checked", false); //Uncheck both selections
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+            error.addClass("invalid-feedback");
+            element.closest(".form-group").append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        }
     });
+
+    $(document).on("change", "input.toggle_report_mode", function () {
+
+        var id = $(this).val();
+
+        var supplier_div = $("div.supplier_selection");
+        var product_div = $("div.product_selection");
+
+        if (id == "supplier") {
+            product_div.addClass("hide");
+            supplier_div.removeClass("hide");
+        } else {
+            supplier_div.addClass("hide");
+            product_div.removeClass("hide");
+        }
+    });
+
+    $(document).on("change", "select#category_id", function () {
+
+        var categoryId = $(this).val();
+        var productSelect = $("select#product_id");
+        var html;
+
+        productSelect.val("");
+
+        $.ajax({
+            url: "{{ route('get-products-by-category') }}",
+            type: "GET",
+            data: {category_id: categoryId},
+            success: function (data) {
+
+                console.log(data);
+
+                if (!data || !data.length) {
+                    html = "<option value=''>No Products Available</option>";
+                    productSelect.html(html);
+                    return;
+                }
+
+                html = "<option value=''>Select Product</option>";
+
+                $.each(data, function (key, val) {
+                    html += "<option value='" + val.id + "'>" + val.name + "</option>";
+                });
+
+                productSelect.html(html);
+            }
+        });
+    });
+
+    $("div.supplier_selection").find("span.select2.select2-container").css({width: "100%"}); //Select collapse when hidden. Expand to full width
+    $("div.product_selection").find("span.select2.select2-container").css({width: "100%"});
+    $("input.toggle_report_mode").prop("checked", false); //Uncheck both selections
+});
 
 </script>
 

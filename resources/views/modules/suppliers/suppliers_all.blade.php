@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Suppliers
+Easy Inventory | Suppliers
 @endsection
 
 @section('admin')
@@ -38,36 +38,36 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Supplier Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Supplier Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $row)
 
-                                    <tr>
-                                        <td>{{ $row->id }}</td>
-                                        <td>{{ $row->name }}</td>
-                                        <td>{{ $row->phone }}</td>
-                                        <td>{{ $row->email }}</td>
-                                        <td>{{ $row['status']['status'] }}</td>
-                                        <td>
-                                            <a href="{{ route('supplier.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                <tr>
+                                    <td>{{ $row->id }}</td>
+                                    <td>{{ $row->name }}</td>
+                                    <td>{{ $row->phone }}</td>
+                                    <td>{{ $row->email }}</td>
+                                    <td>{{ $row['status']['status'] }}</td>
+                                    <td>
+                                        <a href="{{ route('supplier.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                            <a href="{{ route('supplier.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        <a href="{{ route('supplier.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

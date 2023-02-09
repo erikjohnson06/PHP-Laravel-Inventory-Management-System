@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Edit Supplier
+Easy Inventory | Edit Supplier
 @endsection
 
 @section('admin')
@@ -56,7 +56,7 @@
                                 <div class="col-sm-10">
                                     <select name="status_id" class="form-select" aria-label="Status">
                                         @foreach($statuses as $option)
-                                            <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
+                                        <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -80,38 +80,34 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         $("form#suppplierEditForm").validate({
-            rules : {
-                name : {required : true},
-                phone : {required : true},
-                email : {required : true}
-                //address : {required : true}
+            rules: {
+                name: {required: true},
+                phone: {required: true},
+                email: {required: true}
             },
-            messages : {
-                name : {
-                    required : "Please Enter a Supplier Name"
+            messages: {
+                name: {
+                    required: "Please Enter a Supplier Name"
                 },
-                phone : {
-                    required : "Please Enter a Phone Number for this Supplier"
+                phone: {
+                    required: "Please Enter a Phone Number for this Supplier"
                 },
-                email : {
-                    required : "Please Enter a Email Address for this Supplier"
+                email: {
+                    required: "Please Enter a Email Address for this Supplier"
                 }
-                //address : {
-                //    required : "Please Enter a Supplier Address"
-                //}
             },
-            errorElement : "span",
-            errorPlacement : function(error, element){
+            errorElement: "span",
+            errorPlacement: function (error, element) {
                 error.addClass("invalid-feedback");
                 element.closest(".form-group").append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function (element, errorClass, validClass) {
                 $(element).addClass("is-invalid");
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass("is-invalid");
             }
         });

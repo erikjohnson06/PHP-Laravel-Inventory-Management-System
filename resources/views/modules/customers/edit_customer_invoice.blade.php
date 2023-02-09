@@ -24,11 +24,6 @@ $subtotal = 0;
 
                         <a href="{{ route('customers.credit') }}"><i class="ri-arrow-left-s-line"></i>&nbsp;Back</a>
 
-                        <!--
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item active"><a href="{{ route('invoices.all') }}">Back</a></li>
-                        </ol>
-                        -->
                     </div>
 
                 </div>
@@ -153,7 +148,7 @@ $subtotal = 0;
                                                     <select name="payment_status" id="payment_status" class="form-select">
                                                         <option value="">---</option>
                                                         @foreach($payment_statuses as $option)
-                                                            <option value="{{ $option->id }}">{{ $option->status }}</option>
+                                                        <option value="{{ $option->id }}">{{ $option->status }}</option>
                                                         @endforeach
                                                     </select>
                                                     <input

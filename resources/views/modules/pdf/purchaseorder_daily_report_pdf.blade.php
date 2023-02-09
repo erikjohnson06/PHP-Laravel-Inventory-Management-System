@@ -33,7 +33,7 @@ $total = 0;
                             <div class="col-12">
                                 <div class="invoice-title">
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
                             </div>
@@ -88,19 +88,19 @@ $total = 0;
 
                                                     @foreach($data as $k => $row)
 
-                                                        @php
-                                                        $total += $row->purchase_price;
-                                                        @endphp
+                                                    @php
+                                                    $total += $row->purchase_price;
+                                                    @endphp
 
-                                                        <tr>
-                                                            <td class="text-center">{{ $k + 1 }}</td>
-                                                            <td class="text-center">{{ $row->po_number }}</td>
-                                                            <td class="text-center">{{      date('m/d/Y', strtotime($row->po_date)) }}</td>
-                                                            <td>{{ $row['product']['id'] }} - {{ $row['product']['name'] }}</td>
-                                                            <td class="text-center">{{ $row->purchase_qty }} ({{ $row['product']['unit']['name'] }})</td>
-                                                            <td class="text-center">{{ number_format($row->unit_price, 2) }}</td>
-                                                            <td class="text-end">{{ number_format($row->purchase_price, 2) }}</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td class="text-center">{{ $k + 1 }}</td>
+                                                        <td class="text-center">{{ $row->po_number }}</td>
+                                                        <td class="text-center">{{      date('m/d/Y', strtotime($row->po_date)) }}</td>
+                                                        <td>{{ $row['product']['id'] }} - {{ $row['product']['name'] }}</td>
+                                                        <td class="text-center">{{ $row->purchase_qty }} ({{ $row['product']['unit']['name'] }})</td>
+                                                        <td class="text-center">{{ number_format($row->unit_price, 2) }}</td>
+                                                        <td class="text-end">{{ number_format($row->purchase_price, 2) }}</td>
+                                                    </tr>
 
                                                     @endforeach()
 

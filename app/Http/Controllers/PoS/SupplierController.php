@@ -12,13 +12,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class SupplierController extends Controller
-{
+class SupplierController extends Controller {
 
     /**
      * @return View
      */
-    public function viewSuppliersAll() : View {
+    public function viewSuppliersAll(): View {
 
         $data = Supplier::latest()->get();
 
@@ -31,11 +30,11 @@ class SupplierController extends Controller
      *
      * @return View
      */
-    public function viewAddSupplier() : View {
+    public function viewAddSupplier(): View {
 
         $statuses = SupplierStatus::orderBy("id", "ASC")->get();
 
-        return view("modules.suppliers.supplier_add",[
+        return view("modules.suppliers.supplier_add", [
             "statuses" => $statuses
         ]);
     }
@@ -44,7 +43,7 @@ class SupplierController extends Controller
      * @param int $id
      * @return View
      */
-    public function viewEditSupplier(int $id) : View {
+    public function viewEditSupplier(int $id): View {
 
         $data = Supplier::findOrFail($id);
         $statuses = SupplierStatus::orderBy("id", "ASC")->get();
@@ -59,13 +58,13 @@ class SupplierController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addSupplier(Request $request) : RedirectResponse {
+    public function addSupplier(Request $request): RedirectResponse {
 
         $request->validate([
             "name" => "required",
             "phone" => "required",
             "email" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Supplier Name",
             "phone.required" => "Please Enter a Phone Number for this Supplier",
             "email.required" => "Please Enter an Email Address for this Supplier"
@@ -92,7 +91,7 @@ class SupplierController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateSupplier(Request $request) : RedirectResponse {
+    public function updateSupplier(Request $request): RedirectResponse {
 
         $id = (int) $request->id;
 
@@ -100,7 +99,7 @@ class SupplierController extends Controller
             "name" => "required",
             "phone" => "required",
             "email" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Supplier Name",
             "phone.required" => "Please Enter a Phone Number for this Supplier",
             "email.required" => "Please Enter a Email Address for this Supplier"
@@ -127,7 +126,7 @@ class SupplierController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function deleteSupplier(int $id) : RedirectResponse {
+    public function deleteSupplier(int $id): RedirectResponse {
 
         Supplier::findOrFail($id)->delete();
 

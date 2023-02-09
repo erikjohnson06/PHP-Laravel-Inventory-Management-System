@@ -6,17 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Invoice;
-//use App\Models\InvoiceStatus;
 use App\Models\InvoiceDetail;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
 use App\Models\PaymentStatus;
 use App\Models\Product;
-//use App\Models\ProductStatus;
-//use App\Models\PurchaseOrder;
-//use App\Models\PurchaseOrderStatus;
-//use App\Models\Supplier;
-//use App\Models\Unit;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -27,16 +21,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class InvoiceController extends Controller
-{
+class InvoiceController extends Controller {
 
     /**
      * @return View
      */
-    public function viewInvoicesAll() : View {
+    public function viewInvoicesAll(): View {
 
-        $data = Invoice::orderBy('invoice_date','DESC')
-                ->orderBy('id','DESC')
+        $data = Invoice::orderBy('invoice_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->where("status_id", 1)
                 ->get();
 
@@ -48,10 +41,10 @@ class InvoiceController extends Controller
     /**
      * @return View
      */
-    public function viewInvoicesPending() : View {
+    public function viewInvoicesPending(): View {
 
-        $data = Invoice::orderBy('invoice_date','DESC')
-                ->orderBy('id','DESC')
+        $data = Invoice::orderBy('invoice_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->where("status_id", 0)
                 ->get();
 
@@ -63,23 +56,22 @@ class InvoiceController extends Controller
     /**
      * @return View
      */
-    public function viewAddInvoice() : View {
+    public function viewAddInvoice(): View {
 
         $categories = Category::where('status_id', 1)
                 ->orderBy('id', 'ASC')
                 ->get();
 
-        $payment_statuses = PaymentStatus::orderBy('id','ASC')->get();
+        $payment_statuses = PaymentStatus::orderBy('id', 'ASC')->get();
 
         $customers = Customer::where("status_id", 1)->get();
 
         $invoice_data = Invoice::orderBy("id", "DESC")->first();
         $invoice_id = 0; //TO DO: need to re-do this in case multiple users are adding invoices at the same time
 
-        if (is_null($invoice_data)){
+        if (is_null($invoice_data)) {
             $invoice_id = 1000;
-        }
-        else {
+        } else {
             $invoice_id = $invoice_data->invoice_no + 1;
         }
 
@@ -97,7 +89,7 @@ class InvoiceController extends Controller
     /**
      * @return View
      */
-    public function viewApproveInvoice(int $id) : View {
+    public function viewApproveInvoice(int $id): View {
 
         $invoice = Invoice::with("invoice_details")->findOrFail($id);
         $payment = Payment::where('invoice_id', $invoice->invoice_no)->first();
@@ -111,7 +103,7 @@ class InvoiceController extends Controller
     /**
      * @return View
      */
-    public function viewPrintInvoice(int $id) : View {
+    public function viewPrintInvoice(int $id): View {
 
         $invoice = Invoice::with("invoice_details")->findOrFail($id);
         $payment = Payment::where('invoice_id', $invoice->invoice_no)->first();
@@ -122,8 +114,7 @@ class InvoiceController extends Controller
         ]);
     }
 
-
-    public function viewInvoiceDailyReport() : View {
+    public function viewInvoiceDailyReport(): View {
 
         $curr_date = (new DateTime)->format("m-d-y");
 
@@ -133,50 +124,32 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @return View
-     */
-    /*
-    public function viewPrintInvoiceList() : View {
-
-        $data = Invoice::orderBy('invoice_date','DESC')
-                ->orderBy('id','DESC')
-                ->where("status_id", 1)
-                ->get();
-
-        return view("modules.invoices.invoice_print_list", [
-            "data" => $data
-        ]);
-    }
-    */
-
-    /**
      * @param Request $request
      * @return RedirectResponse
      */
-    public function createInvoice(Request $request) : RedirectResponse {
+    public function createInvoice(Request $request): RedirectResponse {
 
         $notifications = [];
 
-        if ($request->product_id == null){
+        if ($request->product_id == null) {
 
             $notifications = [
                 "message" => "No items have been added to the invoice",
                 "alert-type" => "error"
             ];
-        }
-        else if ($request->paid_amount > $request->invoiceTotal){
+        } else if ($request->paid_amount > $request->invoiceTotal) {
             $notifications = [
                 "message" => "Paid Amount cannot exceed the invoice total",
                 "alert-type" => "error"
             ];
         }
 
-        if ($notifications){
+        if ($notifications) {
             return redirect()->back()->with($notifications);
         }
 
 
-        DB::transaction(function() use($request){
+        DB::transaction(function () use ($request) {
 
             $customer_id = 0;
 
@@ -185,14 +158,14 @@ class InvoiceController extends Controller
             $invoice->invoice_date = (DateTime::createFromFormat("Y-m-d", $request->invoice_date))->format("Y-m-d");
             $invoice->comments = $request->comments;
             $invoice->status_id = 0;
-            $invoice->created_by =  Auth::user()->id;
-            $invoice->created_at =  Carbon::now();
+            $invoice->created_by = Auth::user()->id;
+            $invoice->created_at = Carbon::now();
 
-            if ($invoice->save()){
+            if ($invoice->save()) {
 
                 $itemCount = count($request->product_id);
 
-                for ($i = 0; $i < $itemCount; $i++){
+                for ($i = 0; $i < $itemCount; $i++) {
 
                     $invoiceDetail = new InvoiceDetail;
                     $invoiceDetail->invoice_id = $invoice->invoice_no;
@@ -207,7 +180,7 @@ class InvoiceController extends Controller
                 }
 
                 //Add new Customers
-                if ($request->customer_id == "0"){
+                if ($request->customer_id == "0") {
 
                     $customer = new Customer;
                     $customer->name = $request->customer_name;
@@ -215,8 +188,7 @@ class InvoiceController extends Controller
                     $customer->email = $request->customer_email;
                     $customer->save();
                     $customer_id = $customer->id;
-                }
-                else {
+                } else {
                     $customer_id = (int) $request->customer_id;
                 }
 
@@ -234,21 +206,21 @@ class InvoiceController extends Controller
                 $paymentDetails->updated_by = Auth::user()->id;
 
                 //Full payments
-                if ($payment->status_id === 1){
+                if ($payment->status_id === 1) {
                     $payment->payment_amount = (float) $request->invoiceTotal;
                     $payment->due_amount = 0;
 
                     $paymentDetails->current_paid_amount = (float) $request->invoiceTotal;
                 }
                 //Full Due payment
-                else if ($payment->status_id === 2){
+                else if ($payment->status_id === 2) {
                     $payment->payment_amount = 0;
                     $payment->due_amount = (float) $request->invoiceTotal;
 
                     $paymentDetails->current_paid_amount = 0;
                 }
                 //Partial payments
-                else if ($payment->status_id === 3){
+                else if ($payment->status_id === 3) {
                     $payment->payment_amount = (float) $request->payment_amount;
                     $payment->due_amount = floatVal($request->invoiceTotal) - floatVal($request->payment_amount);
 
@@ -268,13 +240,12 @@ class InvoiceController extends Controller
         return redirect()->route("invoices.all")->with($notifications);
     }
 
-
     /**
      * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
-    public function deleteInvoice(int $id) : RedirectResponse {
+    public function deleteInvoice(int $id): RedirectResponse {
 
         $notifications = [];
 
@@ -282,7 +253,7 @@ class InvoiceController extends Controller
 
             $invoice = Invoice::findOrFail($id);
 
-            if (!$invoice || !$invoice->id){
+            if (!$invoice || !$invoice->id) {
                 throw new Exception("Unable to Delete this Invoice");
             }
 
@@ -298,8 +269,7 @@ class InvoiceController extends Controller
                 "message" => "Invoice #" . $invoice->invoice_no . " Deleted",
                 "alert-type" => "success"
             ];
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $notifications = [
                 "message" => $ex->getMessage(),
                 "alert-type" => "error"
@@ -314,32 +284,32 @@ class InvoiceController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function approveInvoice(Request $request, int $id) : RedirectResponse {
+    public function approveInvoice(Request $request, int $id): RedirectResponse {
 
 
         $notifications = [];
 
         $invoice = Invoice::findOrFail($id);
 
-        if (!$invoice || !$request->product_id || !$request->sales_qty){
+        if (!$invoice || !$request->product_id || !$request->sales_qty) {
             $notifications = [
                 "message" => "Whoops... An unexpected error has occurred. ",
                 "alert-type" => "error"
             ];
         }
 
-        if ($notifications){
+        if ($notifications) {
             return redirect()->back()->with($notifications);
         }
 
         //Ensure qty ordered does not exceed on hand values. If so, return with an error message
-        foreach ($request->sales_qty as $k => $val){
+        foreach ($request->sales_qty as $k => $val) {
 
             $invoiceDetails = InvoiceDetail::where('id', $k)->first();
 
             $product = Product::where("id", $invoiceDetails->product_id)->first();
 
-            if ($product->quantity < $val){
+            if ($product->quantity < $val) {
 
                 $notifications = [
                     "message" => "Unable to fulfill item " . $product->id . ". Qty ordered (" . $val . ") exceeds availability (" . $product->quantity . ")",
@@ -350,16 +320,16 @@ class InvoiceController extends Controller
             }
         }
 
-        if ($notifications){
+        if ($notifications) {
             return redirect()->back()->with($notifications);
         }
 
         $invoice->updated_by = Auth::user()->id;
         $invoice->status_id = 1;
 
-        DB::transaction(function() use($request, $invoice, $id){
+        DB::transaction(function () use ($request, $invoice, $id) {
 
-            foreach ($request->sales_qty as $k => $val){
+            foreach ($request->sales_qty as $k => $val) {
 
                 $invoiceDetails = InvoiceDetail::where('id', $k)->first();
                 $product = Product::where("id", $invoiceDetails->product_id)->first();
@@ -386,12 +356,12 @@ class InvoiceController extends Controller
      * @param Request $request
      * @return RedirectResponse|View
      */
-    public function searchInvoiceDataByDates(Request $request){
+    public function searchInvoiceDataByDates(Request $request) {
 
         $start_date = DateTime::createFromFormat("Y-m-d", $request->start_date);  // date("Y-m-d", strtotime($request->start_date));
         $end_date = DateTime::createFromFormat("Y-m-d", $request->end_date);
 
-        if (!$start_date || !$end_date){
+        if (!$start_date || !$end_date) {
 
             $notifications = [
                 "message" => "Invalid Start or End Date",
@@ -403,7 +373,7 @@ class InvoiceController extends Controller
 
         //dd(intval($end_date->format("U")));
 
-        if (intval($end_date->format("U")) < intval($start_date->format("U"))){
+        if (intval($end_date->format("U")) < intval($start_date->format("U"))) {
             $notifications = [
                 "message" => "Start Date must precede End Date",
                 "alert-type" => "error"
@@ -415,8 +385,6 @@ class InvoiceController extends Controller
         $data = Invoice::whereBetween("invoice_date", [$start_date->format("Y-m-d"), $end_date->format("Y-m-d")])
                 ->where("status_id", 1)
                 ->get();
-
-
 
         return view("modules.pdf.invoice_daily_report_pdf", [
             "data" => $data,

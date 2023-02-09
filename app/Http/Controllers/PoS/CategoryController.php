@@ -12,12 +12,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class CategoryController extends Controller
-{
+class CategoryController extends Controller {
+
     /**
      * @return View
      */
-    public function viewCategoriesAll() : View {
+    public function viewCategoriesAll(): View {
 
         $data = Category::latest()->get();
 
@@ -29,7 +29,7 @@ class CategoryController extends Controller
     /**
      * @return View
      */
-    public function viewAddCategory() : View {
+    public function viewAddCategory(): View {
 
         $statuses = CategoryStatus::orderBy("id", "ASC")->get();
 
@@ -42,7 +42,7 @@ class CategoryController extends Controller
      * @param int $id
      * @return View
      */
-    public function viewEditCategory(int $id) : View {
+    public function viewEditCategory(int $id): View {
 
         $data = Category::findOrFail($id);
         $statuses = CategoryStatus::orderBy("id", "ASC")->get();
@@ -57,11 +57,11 @@ class CategoryController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addCategory(Request $request) : RedirectResponse {
+    public function addCategory(Request $request): RedirectResponse {
 
         $request->validate([
             "name" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Unit Name"
         ]);
 
@@ -84,13 +84,13 @@ class CategoryController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateCategory(Request $request) : RedirectResponse {
+    public function updateCategory(Request $request): RedirectResponse {
 
         $id = (int) $request->id;
 
         $request->validate([
             "name" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Category Name"
         ]);
 
@@ -113,7 +113,7 @@ class CategoryController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function deleteCategory(int $id) : RedirectResponse {
+    public function deleteCategory(int $id): RedirectResponse {
 
         Category::findOrFail($id)->delete();
 

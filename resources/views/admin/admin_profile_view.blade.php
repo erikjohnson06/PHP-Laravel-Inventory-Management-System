@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | My Profile
+Easy Inventory | My Profile
 @endsection
 
 @section('admin')

@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Update Password
+Easy Inventory | Update Password
 @endsection
 
 @section('admin')
@@ -21,9 +21,9 @@
 
                         @if(count($errors))
 
-                            @foreach ($errors->all() as $error)
-                                <p class="alert alert-danger alert-dismissable fade show">{{ $error }}</p>
-                            @endforeach
+                        @foreach ($errors->all() as $error)
+                        <p class="alert alert-danger alert-dismissable fade show">{{ $error }}</p>
+                        @endforeach
                         @endif
 
                         <form method="post" action="{{ route('store.password') }}" enctype="multipart/form-data">

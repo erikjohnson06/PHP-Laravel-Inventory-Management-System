@@ -11,12 +11,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class UnitController extends Controller
-{
+class UnitController extends Controller {
+
     /**
      * @return View
      */
-    public function viewUnitsAll() : View {
+    public function viewUnitsAll(): View {
 
         $data = Unit::latest()->get();
 
@@ -28,7 +28,7 @@ class UnitController extends Controller
     /**
      * @return View
      */
-    public function viewAddUnit() : View {
+    public function viewAddUnit(): View {
 
         return view("modules.units.unit_add");
     }
@@ -37,7 +37,7 @@ class UnitController extends Controller
      * @param int $id
      * @return View
      */
-    public function viewEditUnit(int $id) : View {
+    public function viewEditUnit(int $id): View {
 
         $data = Unit::findOrFail($id);
 
@@ -50,11 +50,11 @@ class UnitController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addUnit(Request $request) : RedirectResponse {
+    public function addUnit(Request $request): RedirectResponse {
 
         $request->validate([
             "name" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Unit Name"
         ]);
 
@@ -77,13 +77,13 @@ class UnitController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateUnit(Request $request) : RedirectResponse {
+    public function updateUnit(Request $request): RedirectResponse {
 
         $id = (int) $request->id;
 
         $request->validate([
             "name" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Unit Name"
         ]);
 
@@ -100,12 +100,12 @@ class UnitController extends Controller
 
         return redirect()->route("units.all")->with($notifications);
     }
-    
+
     /**
      * @param int $id
      * @return RedirectResponse
      */
-    public function deleteUnit(int $id) : RedirectResponse {
+    public function deleteUnit(int $id): RedirectResponse {
 
         Unit::findOrFail($id)->delete();
 

@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Edit Customer
+Easy Inventory | Edit Customer
 @endsection
 
 @section('admin')
@@ -65,7 +65,7 @@
                                 <div class="col-sm-10">
                                     <select name="status_id" class="form-select" aria-label="Status">
                                         @foreach($statuses as $option)
-                                            <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
+                                        <option value="{{ $option->id }}" {{ $option->id == $data->status_id ? 'selected' : '' }} >{{ $option->status }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -107,12 +107,12 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-        $("input#customer-image").change(function(e){
+        $("input#customer-image").change(function (e) {
             var reader = new FileReader();
 
-            reader.onload = function(e){
+            reader.onload = function (e) {
                 $('img#customer-image-show').attr("src", e.target.result);
             };
 
@@ -120,39 +120,35 @@
         });
 
         $("form#customerAddForm").validate({
-            rules : {
-                name : {required : true},
-                phone : {required : true},
-                email : {required : true},
-                address : {required : true}
+            rules: {
+                name: {required: true},
+                phone: {required: true},
+                email: {required: true},
+                address: {required: true}
             },
-            messages : {
-                name : {
-                    required : "Please Enter a Customer Name"
+            messages: {
+                name: {
+                    required: "Please Enter a Customer Name"
                 },
-                phone : {
-                    required : "Please Enter a Phone Number for this Customer"
+                phone: {
+                    required: "Please Enter a Phone Number for this Customer"
                 },
-                email : {
-                    required : "Please Enter an Email Address for this Customer"
+                email: {
+                    required: "Please Enter an Email Address for this Customer"
                 },
-                address : {
-                    required : "Please Enter an Address for this Customer"
+                address: {
+                    required: "Please Enter an Address for this Customer"
                 }
-                //image : {
-                //    required : "Please Enter a Email Address for this Customer"
-                //}
-
             },
-            errorElement : "span",
-            errorPlacement : function(error, element){
+            errorElement: "span",
+            errorPlacement: function (error, element) {
                 error.addClass("invalid-feedback");
                 element.closest(".form-group").append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function (element, errorClass, validClass) {
                 $(element).addClass("is-invalid");
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass("is-invalid");
             }
         });

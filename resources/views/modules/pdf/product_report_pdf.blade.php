@@ -30,7 +30,7 @@ Easy Inventory | Product Report
                                 <div class="invoice-title">
 
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
 

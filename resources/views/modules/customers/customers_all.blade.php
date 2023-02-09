@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Customers
+Easy Inventory | Customers
 @endsection
 
 @section('admin')
@@ -32,56 +32,54 @@
                         <br />
                         <br />
 
-                        <!--<h4 class="card-title">Suppliers</h4>-->
-
                         <table id="datatable"
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Customer Name</th>
-                                <th>Customer Image</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Image</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $row)
 
-                                    <tr>
-                                        <td>{{ $row->id }}</td>
-                                        <td>{{ $row->name }}</td>
-                                        <td>
+                                <tr>
+                                    <td>{{ $row->id }}</td>
+                                    <td>{{ $row->name }}</td>
+                                    <td>
 
-                                            @if(!empty($row->image))
-                                                <img
-                                                    src="{{ (!empty($row->image)) ? asset($row->image) : asset('upload/no_image.jpg')}}"
-                                                    style="width: 60px; height: 60px;"
-                                                    />
+                                        @if(!empty($row->image))
+                                        <img
+                                            src="{{ (!empty($row->image)) ? asset($row->image) : asset('upload/no_image.jpg')}}"
+                                            style="width: 60px; height: 60px;"
+                                            />
 
-                                            @else
-                                                [None]
-                                            @endif
+                                        @else
+                                        [None]
+                                        @endif
 
-                                        </td>
-                                        <td>{{ $row->phone }}</td>
-                                        <td>{{ $row->email }}</td>
-                                        <td>{{ $row['status']['status'] }}</td>
-                                        <td>
-                                            <a href="{{ route('customer.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                    </td>
+                                    <td>{{ $row->phone }}</td>
+                                    <td>{{ $row->email }}</td>
+                                    <td>{{ $row['status']['status'] }}</td>
+                                    <td>
+                                        <a href="{{ route('customer.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                            <a href="{{ route('customer.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        <a href="{{ route('customer.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

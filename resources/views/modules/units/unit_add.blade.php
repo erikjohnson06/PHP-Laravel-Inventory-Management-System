@@ -1,7 +1,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Add Unit
+Easy Inventory | Add Unit
 @endsection
 
 @section('admin')
@@ -54,26 +54,26 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         $("form#unitAddForm").validate({
-            rules : {
-                name : {required : true}
+            rules: {
+                name: {required: true}
             },
-            messages : {
-                name : {
-                    required : "Please Enter a Unit Name"
+            messages: {
+                name: {
+                    required: "Please Enter a Unit Name"
                 }
             },
-            errorElement : "span",
-            errorPlacement : function(error, element){
+            errorElement: "span",
+            errorPlacement: function (error, element) {
                 error.addClass("invalid-feedback");
                 element.closest(".form-group").append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function (element, errorClass, validClass) {
                 $(element).addClass("is-invalid");
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass("is-invalid");
             }
         });

@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Units
+Easy Inventory | Units
 @endsection
 
 @section('admin')
@@ -36,30 +36,30 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $item)
 
-                                    <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>
-                                            <a href="{{ route('unit.edit', $item->id) }}" class="btn btn-primary sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>
+                                        <a href="{{ route('unit.edit', $item->id) }}" class="btn btn-primary sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                            <a href="{{ route('unit.delete', $item->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        <a href="{{ route('unit.delete', $item->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

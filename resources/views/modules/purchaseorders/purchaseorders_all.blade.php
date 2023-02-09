@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Purchase Orders
+Easy Inventory | Purchase Orders
 @endsection
 
 @section('admin')
@@ -36,55 +36,55 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>PO #</th>
-                                <th>PO Date</th>
-                                <th>Product</th>
-                                <th>Qty</th>
-                                <th>Category</th>
-                                <th>Supplier</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>PO #</th>
+                                    <th>PO Date</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Category</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $row)
 
-                                    @php
-                                        $rowClass = "";
-                                        if ($row->status_id == 0){
-                                            $rowClass = "onHold";
-                                        }
-                                        else if ($row->status_id == 1){
-                                            $rowClass = "approved";
-                                        }
-                                        else if ($row->status_id == 2){ //Cancelled
-                                            $rowClass = "inactive";
-                                        }
+                                @php
+                                $rowClass = "";
+                                if ($row->status_id == 0){
+                                $rowClass = "onHold";
+                                }
+                                else if ($row->status_id == 1){
+                                $rowClass = "approved";
+                                }
+                                else if ($row->status_id == 2){ //Cancelled
+                                $rowClass = "inactive";
+                                }
 
-                                        $desc = $row['product']['id'] . " - " . $row['product']['name'];
-                                    @endphp
+                                $desc = $row['product']['id'] . " - " . $row['product']['name'];
+                                @endphp
 
-                                    <tr class='{{ $rowClass }}'>
-                                        <td>{{ $row->id }}</td>
-                                        <td>{{ $row->po_number }}</td>
-                                        <td>{{ date('n/j/Y', strtotime($row->po_date)) }}</td>
-                                        <td class="align-left overflow-text">{{ $desc }}</td>
-                                        <td>{{ $row->purchase_qty }}</td>
-                                        <td>{{ $row['category']['name'] }}</td>
-                                        <td>{{ $row['supplier']['name'] }}</td>
-                                        <td>{{ $row['status']['status'] }}</td>
-                                        <td>
-                                            @if ($row->status_id == 0)
-                                                <a href="{{ route('purchaseorder.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                <tr class='{{ $rowClass }}'>
+                                    <td>{{ $row->id }}</td>
+                                    <td>{{ $row->po_number }}</td>
+                                    <td>{{ date('n/j/Y', strtotime($row->po_date)) }}</td>
+                                    <td class="align-left overflow-text">{{ $desc }}</td>
+                                    <td>{{ $row->purchase_qty }}</td>
+                                    <td>{{ $row['category']['name'] }}</td>
+                                    <td>{{ $row['supplier']['name'] }}</td>
+                                    <td>{{ $row['status']['status'] }}</td>
+                                    <td>
+                                        @if ($row->status_id == 0)
+                                        <a href="{{ route('purchaseorder.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                        @endif
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

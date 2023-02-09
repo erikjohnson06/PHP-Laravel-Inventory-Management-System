@@ -20,13 +20,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Intervention\Image\Facades\Image;
 
-class CustomerController extends Controller
-{
+class CustomerController extends Controller {
 
     /**
      * @return View
      */
-    public function viewCustomersAll() : View {
+    public function viewCustomersAll(): View {
 
         $data = Customer::latest()->get();
 
@@ -38,7 +37,7 @@ class CustomerController extends Controller
     /**
      * @return View
      */
-    public function viewCreditCustomersAll() : View {
+    public function viewCreditCustomersAll(): View {
 
         $data = Payment::where("due_amount", ">", 0)->get();
 
@@ -50,7 +49,7 @@ class CustomerController extends Controller
     /**
      * @return View
      */
-    public function viewPaidCustomersAll() : View {
+    public function viewPaidCustomersAll(): View {
 
         $data = Payment::where("due_amount", 0)->get();
 
@@ -63,11 +62,11 @@ class CustomerController extends Controller
      * @param int $invoice_id
      * @return View
      */
-    public function viewEditCustomerInvoice(int $invoice_id) : View {
+    public function viewEditCustomerInvoice(int $invoice_id): View {
 
         $payment = Payment::where("invoice_id", $invoice_id)->first();
 
-        $payment_statuses = PaymentStatus::whereIn("id", [1,3])->orderBy('id','ASC')->get();
+        $payment_statuses = PaymentStatus::whereIn("id", [1, 3])->orderBy('id', 'ASC')->get();
 
         $inv_details = InvoiceDetail::where('invoice_id', $invoice_id)->get();
 
@@ -85,7 +84,7 @@ class CustomerController extends Controller
      * @param int $invoice_id
      * @return View
      */
-    public function viewCustomerInvoiceDetails(int $invoice_id) : View {
+    public function viewCustomerInvoiceDetails(int $invoice_id): View {
 
         $payment = Payment::where("invoice_id", $invoice_id)->first();
 
@@ -103,7 +102,7 @@ class CustomerController extends Controller
     /**
      * @return View
      */
-    public function viewPrintCreditCustomersAll() : View {
+    public function viewPrintCreditCustomersAll(): View {
 
         $data = Payment::where("due_amount", ">", 0)->get();
 
@@ -121,7 +120,7 @@ class CustomerController extends Controller
     /**
      * @return View
      */
-    public function viewPrintPaidCustomersAll() : View {
+    public function viewPrintPaidCustomersAll(): View {
 
         $data = Payment::where("due_amount", 0)->get();
 
@@ -137,9 +136,58 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return View|RedirectResponse
+     */
+    public function viewCustomersReportPDF(Request $request) {
+
+        if (!$request->customer_id) {
+
+            $notifications = [
+                "message" => "Please select a customer",
+                "alert-type" => "error"
+            ];
+
+            return redirect()->back()->with($notifications);
+        }
+
+        $data = null;
+        $title = "";
+
+        switch ($request->query_type) {
+            case "customer_paid":
+
+                $data = Payment::where("customer_id", $request->customer_id)->
+                        where("due_amount", 0)
+                        ->get();
+
+                $title = "Invoices Paid in Full";
+                break;
+
+            case "customer_credit":
+            default:
+
+                $data = Payment::where("customer_id", $request->customer_id)->
+                        where("due_amount", ">", 0)
+                        ->get();
+
+                $title = "Invoices with Outstanding Balance";
+                break;
+        }
+
+        $date = new DateTime('now', new DateTimeZone('America/New_York'));
+
+        return view("modules.pdf.customer_invoice_all_pdf", [
+            "data" => $data,
+            "date" => $date,
+            "title" => $title
+        ]);
+    }
+
+    /**
      * @return View
      */
-    public function viewAddCustomer() : View {
+    public function viewAddCustomer(): View {
 
         $statuses = CustomerStatus::orderBy("id", "ASC")->get();
 
@@ -152,7 +200,7 @@ class CustomerController extends Controller
      * @param int $id
      * @return View
      */
-    public function viewEditCustomer(int $id) : View {
+    public function viewEditCustomer(int $id): View {
 
         $entity = Customer::findOrFail($id);
         $statuses = CustomerStatus::orderBy("id", "ASC")->get();
@@ -164,17 +212,29 @@ class CustomerController extends Controller
     }
 
     /**
+     * @return View
+     */
+    public function viewCustomersReport(): View {
+
+        $data = Customer::latest()->get();
+
+        return view("modules.customers.customer_report", [
+            "data" => $data
+        ]);
+    }
+
+    /**
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addCustomer(Request $request) : RedirectResponse {
+    public function addCustomer(Request $request): RedirectResponse {
 
         $request->validate([
             "name" => "required",
             "phone" => "required",
             "email" => "required",
             "address" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Customer Name",
             "phone.required" => "Please Enter a Phone Number for this Customer",
             "email.required" => "Please Enter an Email Address for this Customer",
@@ -183,7 +243,7 @@ class CustomerController extends Controller
 
         $img_url = "";
 
-        if ($request->file("image")){
+        if ($request->file("image")) {
 
             $img = $request->file("image");
             $name_gen = hexdec(uniqid()) . "." . $img->getClientOriginalExtension();
@@ -214,11 +274,11 @@ class CustomerController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function deleteCustomer(int $id) : RedirectResponse {
+    public function deleteCustomer(int $id): RedirectResponse {
 
         $entity = Customer::findOrFail($id);
 
-        if ($entity && $entity->image){
+        if ($entity && $entity->image) {
             unlink($entity->image);
         }
 
@@ -236,7 +296,7 @@ class CustomerController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateCustomer(Request $request) : RedirectResponse {
+    public function updateCustomer(Request $request): RedirectResponse {
 
         $id = (int) $request->id;
 
@@ -245,7 +305,7 @@ class CustomerController extends Controller
             "phone" => "required",
             "email" => "required",
             "address" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Customer Name",
             "phone.required" => "Please Enter a Phone Number for this Customer",
             "email.required" => "Please Enter an Email Address for this Customer",
@@ -262,7 +322,7 @@ class CustomerController extends Controller
             "updated_at" => Carbon::now()
         ];
 
-        if ($request->file("image")){
+        if ($request->file("image")) {
 
             $img = $request->file("image");
             $name_gen = hexdec(uniqid()) . "." . $img->getClientOriginalExtension();
@@ -287,9 +347,7 @@ class CustomerController extends Controller
      * @param int $invoice_id
      * @return RedirectResponse
      */
-    public function updateCustomerInvoice(Request $request, int $invoice_id) : RedirectResponse {
-
-        //dd($request);
+    public function updateCustomerInvoice(Request $request, int $invoice_id): RedirectResponse {
 
         $payment = Payment::where("invoice_id", (int) $invoice_id)->first();
 
@@ -297,19 +355,18 @@ class CustomerController extends Controller
 
         try {
 
-            if (!$payment){
+            if (!$payment) {
                 throw new Exception("Whoops.. an unexected error has occurred. Unable to find the necessary payment data.");
             }
 
-            if ($request->payment_status == "3" && (is_nan($request->payment_amount) || $request->payment_amount <= 0)){
+            if ($request->payment_status == "3" && (is_nan($request->payment_amount) || $request->payment_amount <= 0)) {
                 throw new Exception("Whoops.. Please enter a valid payment amount.");
             }
 
-            if ($request->payment_amount && $request->payment_amount > $payment->due_amount){
+            if ($request->payment_amount && $request->payment_amount > $payment->due_amount) {
                 throw new Exception("Whoops.. You cannot pay more than the due amount ($" . number_format($payment->due_amount, 2) . ")");
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
 
             $notifications = [
                 "message" => $ex->getMessage(),
@@ -328,7 +385,7 @@ class CustomerController extends Controller
         $payment->status_id = (int) $request->payment_status;
 
         //Paid in Full
-        if ($payment->status_id === 1){
+        if ($payment->status_id === 1) {
 
             //Calculate new paid and due amounts
             $paymentDetails->current_paid_amount = $payment->due_amount;
@@ -337,7 +394,7 @@ class CustomerController extends Controller
             $payment->due_amount = 0;
         }
         //Partial Payment
-        else if ($payment->status_id === 3){
+        else if ($payment->status_id === 3) {
 
             $paymentDetails->current_paid_amount = (float) $request->payment_amount;
 

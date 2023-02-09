@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Products
+Easy Inventory | Products
 @endsection
 
 @section('admin')
@@ -36,48 +36,48 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Supplier</th>
-                                <th>Category</th>
-                                <!--<th>Unit</th>-->
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Supplier</th>
+                                    <th>Category</th>
+                                    <!--<th>Unit</th>-->
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $row)
 
-                                    @php
-                                        $rowClass = "";
-                                        if ($row->status_id == 4){
-                                            $rowClass = "inactive";
-                                        }
-                                        else if ($row->status_id == 3){
-                                            $rowClass = "onHold";
-                                        }
-                                    @endphp
+                                @php
+                                $rowClass = "";
+                                if ($row->status_id == 4){
+                                $rowClass = "inactive";
+                                }
+                                else if ($row->status_id == 3){
+                                $rowClass = "onHold";
+                                }
+                                @endphp
 
-                                    <tr class='{{ $rowClass }}'>
-                                        <td>{{ $row->id }}</td>
-                                        <td class="align-left overflow-text">{{ $row->name }}</td>
-                                        <td>{{ $row['supplier']['name'] }}</td>
-                                        <td>{{ $row['category']['name'] }}</td>
-                                        <!--<td>{{ $row['unit']['name'] }}</td>-->
-                                        <td>{{ $row['status']['status'] }}</td>
-                                        <td>
-                                            <a href="{{ route('product.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                <tr class='{{ $rowClass }}'>
+                                    <td>{{ $row->id }}</td>
+                                    <td class="align-left overflow-text">{{ $row->name }}</td>
+                                    <td>{{ $row['supplier']['name'] }}</td>
+                                    <td>{{ $row['category']['name'] }}</td>
+                                    <!--<td>{{ $row['unit']['name'] }}</td>-->
+                                    <td>{{ $row['status']['status'] }}</td>
+                                    <td>
+                                        <a href="{{ route('product.edit', $row->id) }}" class="btn btn-primary sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                            <a href="{{ route('product.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        <a href="{{ route('product.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

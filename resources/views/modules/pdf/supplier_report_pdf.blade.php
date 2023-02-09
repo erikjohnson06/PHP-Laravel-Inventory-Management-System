@@ -28,12 +28,10 @@ Easy Inventory | Supplier Report
                         <div class="row">
                             <div class="col-6">
                                 <div class="invoice-title">
-
                                     <h3>
-                                        <img src="{{ asset('backend/assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
+                                        <img src="{{ asset('assets/images/easy_logo_sm.png') }}" alt="logo" height="55" />
                                     </h3>
                                 </div>
-
 
                             </div>
                             <div class="col-6 text-end">

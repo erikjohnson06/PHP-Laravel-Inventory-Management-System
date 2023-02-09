@@ -5,7 +5,7 @@ Easy Inventory | Daily Invoices
 @endsection
 
 @section('css')
-    <link href="{{ asset('backend/assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('admin')
@@ -85,30 +85,30 @@ Easy Inventory | Daily Invoices
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         $("form#dailyReportForm").validate({
-            rules : {
-                start_date : {required : true},
-                end_date : {required : true}
+            rules: {
+                start_date: {required: true},
+                end_date: {required: true}
             },
-            messages : {
-                start_date : {
-                    required : "Please Select a Start Date"
+            messages: {
+                start_date: {
+                    required: "Please Select a Start Date"
                 },
-                end_date : {
-                    required : "Please Select a End Date"
+                end_date: {
+                    required: "Please Select a End Date"
                 }
             },
-            errorElement : "span",
-            errorPlacement : function(error, element){
+            errorElement: "span",
+            errorPlacement: function (error, element) {
                 error.addClass("invalid-feedback");
                 element.closest(".form-group").append(error);
             },
-            highlight : function(element, errorClass, validClass){
+            highlight: function (element, errorClass, validClass) {
                 $(element).addClass("is-invalid");
             },
-            unhighlight : function(element, errorClass, validClass){
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).removeClass("is-invalid");
             }
         });

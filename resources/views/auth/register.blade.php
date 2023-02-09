@@ -12,15 +12,15 @@
         <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
 
         <!-- Bootstrap Css -->
-        <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <!-- Icons Css -->
-        <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
-        <link href="{{ asset('backend/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
     </head>
 
-    <body class="auth-body-bg">
+    <body>
         <div class="bg-overlay"></div>
         <div class="wrapper-page">
             <div class="container-fluid p-0">
@@ -64,11 +64,11 @@
                                     <div class="col-12">
                                         <input id="password"
                                                class="form-control"
-                                                type="password"
-                                                name="password"
-                                                autocomplete="new-password"
-                                                placeholder="Password"
-                                                required >
+                                               type="password"
+                                               name="password"
+                                               autocomplete="new-password"
+                                               placeholder="Password"
+                                               required >
                                     </div>
                                 </div>
 
@@ -77,17 +77,17 @@
                                     <div class="col-12">
                                         <input id="password_confirmation"
                                                class="form-control"
-                                                type="password"
-                                                name="password_confirmation"
-                                                autocomplete="new-password"
-                                                placeholder="Password Confirmation"
-                                                required >
+                                               type="password"
+                                               name="password_confirmation"
+                                               autocomplete="new-password"
+                                               placeholder="Password Confirmation"
+                                               required >
                                     </div>
                                 </div>
 
                                 <div class="form-group text-center row mt-3 pt-1">
                                     <div class="col-12">
-                                        <button class="btn btn-info w-100 waves-effect waves-light" type="submit">Register</button>
+                                        <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Register</button>
                                     </div>
                                 </div>
 
@@ -110,13 +110,13 @@
 
 
         <!-- JAVASCRIPT -->
-        <script src="{{ asset('backend/assets/libs/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/metismenu/metisMenu.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/simplebar/simplebar.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/node-waves/waves.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
 
-        <script src="{{ asset('backend/assets/js/app.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
 
     </body>
 </html>

@@ -15,12 +15,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
+
     /**
      * @return View
      */
-    public function viewProductsAll() : View {
+    public function viewProductsAll(): View {
 
         $data = Product::latest()->get();
 
@@ -32,7 +32,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function viewAddProduct() : View {
+    public function viewAddProduct(): View {
 
         $statuses = ProductStatus::orderBy("id", "ASC")->get();
         $suppliers = Supplier::where('status_id', 1)->orderBy('id', 'ASC')->get();
@@ -50,7 +50,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function viewEditProduct(int $id) : View {
+    public function viewEditProduct(int $id): View {
 
         $data = Product::findOrFail($id);
 
@@ -72,7 +72,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addProduct(Request $request) : RedirectResponse {
+    public function addProduct(Request $request): RedirectResponse {
 
         $request->validate([
             "name" => "required",
@@ -80,7 +80,7 @@ class ProductController extends Controller
             "supplier_id" => "required",
             "unit_id" => "required",
             "status_id" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Product Name",
             "category_id.required" => "Please Select a Category",
             "supplier_id.required" => "Please Select a Supplier",
@@ -111,7 +111,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateProduct(Request $request) : RedirectResponse {
+    public function updateProduct(Request $request): RedirectResponse {
 
         $id = (int) $request->id;
 
@@ -121,7 +121,7 @@ class ProductController extends Controller
             "supplier_id" => "required",
             "unit_id" => "required",
             "status_id" => "required"
-        ],[
+                ], [
             "name.required" => "Please Enter a Product Name",
             "category_id.required" => "Please Select a Category",
             "supplier_id.required" => "Please Select a Supplier",
@@ -152,7 +152,7 @@ class ProductController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function deleteProduct(int $id) : RedirectResponse {
+    public function deleteProduct(int $id): RedirectResponse {
 
         Product::findOrFail($id)->delete();
 

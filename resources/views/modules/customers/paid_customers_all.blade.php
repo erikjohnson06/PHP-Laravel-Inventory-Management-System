@@ -2,7 +2,7 @@
 @extends('admin.admin_master')
 
 @section('title')
-    Easy Inventory | Customers
+Easy Inventory | Customers
 @endsection
 
 @section('admin')
@@ -36,32 +36,32 @@
                                class="table table-bordered dt-responsive"
                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th></th>
-                                <th>Customer</th>
-                                <th>Invoice</th>
-                                <th>Date</th>
-                                <th>Due Amount</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Customer</th>
+                                    <th>Invoice</th>
+                                    <th>Date</th>
+                                    <th>Due Amount</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
 
                             <tbody>
 
                                 @foreach($data as $k => $row)
 
-                                    <tr>
-                                        <td>{{ $k + 1 }}</td>
-                                        <td>{{ $row['customer']['name'] }} ({{ $row['customer']['id'] }})</td>
-                                        <td>{{ $row['invoice']['invoice_no'] }}</td>
-                                        <td>{{ date('n/j/Y', strtotime($row['invoice']['invoice_date'])) }}</td>
-                                        <td>${{ number_format($row->due_amount, 2) }}</td>
-                                        <td>
-                                            <a href="{{ route('customer.invoice.details',$row->invoice_id) }}" class="btn btn-info sm" title="Customer Invoice Details" target="_blank">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $k + 1 }}</td>
+                                    <td>{{ $row['customer']['name'] }} ({{ $row['customer']['id'] }})</td>
+                                    <td>{{ $row['invoice']['invoice_no'] }}</td>
+                                    <td>{{ date('n/j/Y', strtotime($row['invoice']['invoice_date'])) }}</td>
+                                    <td>${{ number_format($row->due_amount, 2) }}</td>
+                                    <td>
+                                        <a href="{{ route('customer.invoice.details',$row->invoice_id) }}" class="btn btn-info sm" title="Customer Invoice Details" target="_blank">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>
