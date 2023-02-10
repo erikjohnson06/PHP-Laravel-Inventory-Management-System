@@ -485,7 +485,7 @@ $(document).ready(function () {
 
     <td>
     <input type="hidden" name="product_id[]" value="@{{product_id}}" />
-    @{{ product_name }}
+    @{{product_id}} - @{{ product_name }}
     </td>
 
     <td>
