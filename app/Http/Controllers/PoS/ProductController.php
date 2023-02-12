@@ -22,6 +22,8 @@ class ProductController extends Controller {
      */
     public function viewProductsAll(): View {
 
+        //Product Status: 1 = Active, 2 = Closeout, 3 = On Hold, 4 = Inactive
+
         $data = Product::latest()->get();
 
         return view("modules.products.products_all", [

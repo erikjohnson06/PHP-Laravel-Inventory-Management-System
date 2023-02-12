@@ -28,6 +28,8 @@ class InvoiceController extends Controller {
      */
     public function viewInvoicesAll(): View {
 
+        //Status: 0 = Pending, 1 = Approved
+
         $data = Invoice::orderBy('invoice_date', 'DESC')
                 ->orderBy('id', 'DESC')
                 ->where("status_id", 1)
@@ -370,8 +372,6 @@ class InvoiceController extends Controller {
 
             return redirect()->back()->with($notifications);
         }
-
-        //dd(intval($end_date->format("U")));
 
         if (intval($end_date->format("U")) < intval($start_date->format("U"))) {
             $notifications = [

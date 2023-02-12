@@ -24,6 +24,8 @@ class PurchaseOrderController extends Controller {
      */
     public function viewPurchaseOrdersAll(): View {
 
+        //Purchase Order Status: 0 = Pending, 1 = Approved, 2 = Canceled
+
         $data = PurchaseOrder::orderBy('po_date', 'DESC')
                 ->orderBy('id', 'DESC')
                 ->get();
