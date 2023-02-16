@@ -82,7 +82,12 @@ class JSController extends Controller {
         $product_id = (int) $request->product_id;
 
         $product = Product::where('id', $product_id)->first();
-        $qty = $product->quantity;
+
+        $qty = 0;
+
+        if ($product){
+            $qty = $product->quantity;
+        }
 
         return response()->json($qty);
     }

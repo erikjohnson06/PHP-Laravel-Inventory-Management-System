@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Register | Admin</title>
+        <title>Register | Easy Inventory 2000</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Admin Dashboard Template" name="description" />
         <meta content="Erik Johnson" name="author" />
@@ -17,7 +17,8 @@
         <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-
+        <!-- Toaster CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
     </head>
 
     <body>
@@ -44,7 +45,7 @@
 
                                 <div class="form-group mb-3 row">
                                     <div class="col-12">
-                                        <input id="name" class="form-control" type="text" name="name" placeholder="Name" required autofocus >
+                                        <input id="name" class="form-control" type="text" name="name" placeholder="Name"  autofocus >
                                     </div>
                                 </div>
 
@@ -122,25 +123,19 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
         <script>
-@if (Session::has('message'))
-
-var type = "{{ Session::get('alert-type','info') }}";
-
-switch (type){
-case 'info':
-        toastr.info(" {{ Session::get('message') }} ");
-        break;
-        case 'success':
-        toastr.success(" {{ Session::get('message') }} ");
-        break;
-        case 'warning':
-        toastr.warning(" {{ Session::get('message') }} ");
-        break;
-        case 'error':
-        toastr.error(" {{ Session::get('message') }} ");
-        break;
-        }
+@if ($errors && $errors->has('name'))
+    toastr.warning(" {{ $errors->first('name') }} ");
+@elseif ($errors && $errors->has('username'))
+    toastr.warning(" {{ $errors->first('username') }} ");
+@elseif ($errors && $errors->has('email'))
+    toastr.warning(" {{ $errors->first('email') }} ");
+@elseif ($errors && $errors->has('password'))
+    toastr.warning(" {{ $errors->first('password') }} ");
+@elseif ($errors && $errors->has('password_confirmation'))
+    toastr.warning(" {{ $errors->first('password_confirmation') }} ");
 @endif
+
+
         </script>
     </body>
 </html>

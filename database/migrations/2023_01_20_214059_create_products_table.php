@@ -16,14 +16,11 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string("name")->nullable();
-
             $table->integer("supplier_id");
             $table->integer("unit_id");
             $table->integer("category_id");
-
             $table->double("quantity")->nullable()->default(0);
-
-            $table->tinyInteger("status")->default(1);
+            $table->tinyInteger("status_id")->default(1)->comment("1 = Active, 2 = Closeout, 3 = On Hold, 4 = Inactive");
             $table->integer("created_by")->nullable();
             $table->integer("updated_by")->nullable();
 

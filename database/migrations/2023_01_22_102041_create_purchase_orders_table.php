@@ -28,7 +28,7 @@ return new class extends Migration
             $table->double("unit_price")->default(0);
             $table->double("purchase_price")->default(0);
 
-            $table->tinyInteger("status_id")->default(0)->comment("0=Pending,1=Approved,2=Canceled");
+            $table->tinyInteger("status_id")->default(0)->comment("1=Pending,2=Approved,3=Canceled");
 
             $table->integer("created_by")->nullable();
             $table->integer("updated_by")->nullable();

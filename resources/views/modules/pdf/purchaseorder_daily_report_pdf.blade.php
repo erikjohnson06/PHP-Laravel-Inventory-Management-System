@@ -86,6 +86,8 @@ $total = 0;
                                                 </thead>
                                                 <tbody>
 
+                                                    @if (count($data) > 0)
+
                                                     @foreach($data as $k => $row)
 
                                                     @php
@@ -103,6 +105,10 @@ $total = 0;
                                                     </tr>
 
                                                     @endforeach()
+
+                                                    @else
+                                                        <tr><td class="text-center">No Results</td></tr>
+                                                    @endif
 
                                                     <tr>
                                                         <td class="thick-line" colspan="5"></td>

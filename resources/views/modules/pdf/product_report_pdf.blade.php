@@ -87,6 +87,7 @@ Easy Inventory | Product Report
                                                 </thead>
                                                 <tbody>
 
+                                                    @if ($data)
                                                     <tr>
                                                         <td class="text-center">{{ $data->id }}</td>
                                                         <td>{{ $data->name }}</td>
@@ -94,7 +95,11 @@ Easy Inventory | Product Report
                                                         <td class="text-center">{{ $data['category']['name'] }}</td>
                                                         <td class="text-center">{{ $data->quantity }}</td>
                                                     </tr>
-
+                                                    @else
+                                                    <tr>
+                                                        <td class="text-center" colspan="5">No Results</td>
+                                                    </tr>
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>

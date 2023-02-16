@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string("invoice_no")->nullable();
+            $table->integer("invoice_no")->default(0); //->unique()
             $table->date("invoice_date")->nullable();
-            $table->text("description")->nullable();
-            $table->tinyInteger("status_id")->default(0)->comment("0=Pending,1=Approved");
+            $table->text("comments")->nullable();
+            $table->tinyInteger("status_id")->default(1)->comment("1=Pending,2=Approved");
             $table->integer("created_by")->nullable();
             $table->integer("updated_by")->nullable();
             $table->timestamps();

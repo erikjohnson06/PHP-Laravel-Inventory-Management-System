@@ -24,7 +24,7 @@ class PurchaseOrderController extends Controller {
      */
     public function viewPurchaseOrdersAll(): View {
 
-        //Purchase Order Status: 0 = Pending, 1 = Approved, 2 = Canceled
+        //Purchase Order Status: 1 = Pending, 2 = Approved, 3 = Canceled
 
         $data = PurchaseOrder::orderBy('po_date', 'DESC')
                 ->orderBy('id', 'DESC')
@@ -82,7 +82,7 @@ class PurchaseOrderController extends Controller {
      */
     public function viewPurchaseOrdersApproval(): View {
 
-        $data = PurchaseOrder::where("status_id", 0)
+        $data = PurchaseOrder::where("status_id", 1)
                 ->orderBy('po_date', 'DESC')
                 ->orderBy('id', 'DESC')
                 ->get();
@@ -108,8 +108,6 @@ class PurchaseOrderController extends Controller {
     public function createPurchaseOrder(Request $request): RedirectResponse {
 
         $notifications = [];
-
-        //dd($request->po_date);
 
         if ($request->product_id == null) {
 
@@ -137,7 +135,7 @@ class PurchaseOrderController extends Controller {
             $purchaseOrder->purchase_qty = (float) $request->purchase_qty[$i];
             $purchaseOrder->unit_price = (float) $request->unit_price[$i];
             $purchaseOrder->purchase_price = (float) $request->purchase_price[$i];
-            $purchaseOrder->status_id = 0;
+            $purchaseOrder->status_id = 1;
             $purchaseOrder->created_by = Auth::user()->id;
             $purchaseOrder->created_at = Carbon::now();
 
@@ -170,7 +168,7 @@ class PurchaseOrderController extends Controller {
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0) {
+        if ($data->status_id !== 1) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Deleted.",
@@ -208,7 +206,7 @@ class PurchaseOrderController extends Controller {
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0) {
+        if ($data->status_id !== 1) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Canceled.",
@@ -218,7 +216,7 @@ class PurchaseOrderController extends Controller {
             return redirect()->back()->with($notifications);
         }
 
-        $data->status_id = 2; //2 = Cancelled
+        $data->status_id = 3; //3 = Cancelled
         $data->save();
 
         $notifications = [
@@ -249,7 +247,7 @@ class PurchaseOrderController extends Controller {
             return redirect()->back()->with($notifications);
         }
 
-        if ($data->status_id !== 0) {
+        if ($data->status_id !== 1) {
 
             $notifications = [
                 "message" => "Purchase Order Cannot be Deleted.",
@@ -266,7 +264,7 @@ class PurchaseOrderController extends Controller {
         $product->quantity = $purchase_qty;
 
         if ($product->save()) {
-            $data->status_id = 1;
+            $data->status_id = 2; //Approved
             $data->save();
 
             $notifications = [
@@ -307,7 +305,7 @@ class PurchaseOrderController extends Controller {
         }
 
         $data = PurchaseOrder::whereBetween("po_date", [$start_date->format("Y-m-d"), $end_date->format("Y-m-d")])
-                ->where("status_id", 1)
+                ->where("status_id", 2)
                 ->get();
 
         return view("modules.pdf.purchaseorder_daily_report_pdf", [

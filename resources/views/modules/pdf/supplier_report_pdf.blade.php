@@ -73,7 +73,7 @@ Easy Inventory | Supplier Report
                                     <div class="">
                                         <div class="table-responsive">
 
-                                            <h3 class="text-center"><strong>Supplier: </strong>{{ ($data[0]) ? $data[0]['supplier']['name'] : "[Not Found]" }}</h3>
+                                            <h3 class="text-center"><strong>Supplier: </strong>{{ (isset($data[0])) ? $data[0]['supplier']['name'] : "[Not Found]" }}</h3>
 
                                             <table class="table">
                                                 <thead>

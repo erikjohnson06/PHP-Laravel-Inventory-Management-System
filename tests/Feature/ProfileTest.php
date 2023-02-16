@@ -10,7 +10,6 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    /*
     public function test_profile_page_is_displayed()
     {
         $user = User::factory()->create();
@@ -30,7 +29,7 @@ class ProfileTest extends TestCase
             ->actingAs($user)
             ->patch('/profile', [
                 'name' => 'Test User',
-                'email' => 'test@example.com',
+                'email' => 'profile_test@example.com',
             ]);
 
         $response
@@ -40,7 +39,7 @@ class ProfileTest extends TestCase
         $user->refresh();
 
         $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
+        $this->assertSame('profile_test@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
     }
 
@@ -97,5 +96,4 @@ class ProfileTest extends TestCase
 
         $this->assertNotNull($user->fresh());
     }
-    */
 }

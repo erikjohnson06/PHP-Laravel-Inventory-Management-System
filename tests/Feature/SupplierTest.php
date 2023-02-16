@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Supplier;
+use App\Models\SupplierStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -16,6 +17,9 @@ class SupplierTest extends TestCase
 
     public function test_supplier_all_page_returns_a_successful_response()
     {
+
+        $supplier_status = SupplierStatus::factory()->create(); //Generate the active status
+
         $response = $this->get('/suppliers/all');
 
         $response->assertStatus(200);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 11, 2023 at 12:01 PM
+-- Generation Time: Feb 16, 2023 at 06:26 PM
 -- Server version: 5.7.36
 -- PHP Version: 8.1.0
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `laravel_inventory`
 --
-CREATE DATABASE IF NOT EXISTS `laravel_inventory` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `laravel_inventory`;
 
 -- --------------------------------------------------------
 
@@ -178,10 +176,10 @@ TRUNCATE TABLE `failed_jobs`;
 DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE IF NOT EXISTS `invoices` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `invoice_no` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `invoice_no` int(11) NOT NULL DEFAULT '0',
   `invoice_date` date DEFAULT NULL,
   `comments` text COLLATE utf8mb4_unicode_ci,
-  `status_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=Pending,1=Approved',
+  `status_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1=Pending,2=Approved',
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -200,11 +198,11 @@ TRUNCATE TABLE `invoices`;
 --
 
 INSERT INTO `invoices` (`id`, `invoice_no`, `invoice_date`, `comments`, `status_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, '1000', '2023-01-10', NULL, 1, 6, 6, '2023-02-11 16:50:02', '2023-02-11 16:54:30'),
-(2, '1001', '2023-02-11', NULL, 1, 6, 6, '2023-02-11 16:52:59', '2023-02-11 16:54:36'),
-(3, '1002', '2023-02-11', NULL, 1, 6, 6, '2023-02-11 16:54:03', '2023-02-11 16:54:43'),
-(4, '1003', '2023-02-11', NULL, 1, 6, 6, '2023-02-11 16:55:32', '2023-02-11 16:55:44'),
-(5, '1004', '2023-02-11', NULL, 0, 6, NULL, '2023-02-11 17:00:16', '2023-02-11 17:00:16');
+(1, 1000, '2023-01-10', NULL, 2, 6, 6, '2023-02-11 16:50:02', '2023-02-11 16:54:30'),
+(2, 1001, '2023-02-11', NULL, 2, 6, 6, '2023-02-11 16:52:59', '2023-02-11 16:54:36'),
+(3, 1002, '2023-02-11', NULL, 2, 6, 6, '2023-02-11 16:54:03', '2023-02-11 16:54:43'),
+(4, 1003, '2023-02-11', NULL, 2, 6, 6, '2023-02-11 16:55:32', '2023-02-11 16:55:44'),
+(5, 1004, '2023-02-11', NULL, 1, 6, NULL, '2023-02-11 17:00:16', '2023-02-11 17:00:16');
 
 -- --------------------------------------------------------
 
@@ -237,18 +235,18 @@ TRUNCATE TABLE `invoice_details`;
 --
 
 INSERT INTO `invoice_details` (`id`, `invoice_id`, `invoice_date`, `category_id`, `product_id`, `sales_qty`, `unit_price`, `sales_price`, `status_id`) VALUES
-(1, 1000, '2023-01-10', 1, 6, 5, 550, 2750, 1),
-(2, 1000, '2023-01-10', 1, 4, 5, 575, 2875, 1),
-(3, 1000, '2023-01-10', 1, 3, 10, 600, 6000, 1),
-(4, 1001, '2023-02-11', 2, 8, 2, 200, 400, 1),
-(5, 1001, '2023-02-11', 2, 7, 2, 200, 400, 1),
-(6, 1002, '2023-02-11', 3, 9, 5, 350, 1750, 1),
-(7, 1002, '2023-02-11', 3, 2, 5, 450, 2250, 1),
-(8, 1002, '2023-02-11', 3, 1, 5, 250, 1250, 1),
-(9, 1003, '2023-02-11', 1, 6, 2, 550, 1100, 1),
-(10, 1003, '2023-02-11', 1, 4, 2, 550, 1100, 1),
-(11, 1003, '2023-02-11', 1, 3, 4, 500, 2000, 1),
-(12, 1004, '2023-02-11', 2, 5, 5, 200, 1000, 0);
+(1, 1000, '2023-01-10', 1, 6, 5, 550, 2750, 2),
+(2, 1000, '2023-01-10', 1, 4, 5, 575, 2875, 2),
+(3, 1000, '2023-01-10', 1, 3, 10, 600, 6000, 2),
+(4, 1001, '2023-02-11', 2, 8, 2, 200, 400, 2),
+(5, 1001, '2023-02-11', 2, 7, 2, 200, 400, 2),
+(6, 1002, '2023-02-11', 3, 9, 5, 350, 1750, 2),
+(7, 1002, '2023-02-11', 3, 2, 5, 450, 2250, 2),
+(8, 1002, '2023-02-11', 3, 1, 5, 250, 1250, 2),
+(9, 1003, '2023-02-11', 1, 6, 2, 550, 1100, 2),
+(10, 1003, '2023-02-11', 1, 4, 2, 550, 1100, 2),
+(11, 1003, '2023-02-11', 1, 3, 4, 500, 2000, 2),
+(12, 1004, '2023-02-11', 2, 5, 5, 200, 1000, 2);
 
 -- --------------------------------------------------------
 
@@ -261,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `invoice_statuses` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `status` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Truncate table before insert `invoice_statuses`
@@ -273,8 +271,8 @@ TRUNCATE TABLE `invoice_statuses`;
 --
 
 INSERT INTO `invoice_statuses` (`id`, `status`) VALUES
-(0, 'Pending'),
-(1, 'Approved');
+(1, 'Pending'),
+(2, 'Approved');
 
 -- --------------------------------------------------------
 
@@ -359,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `invoice_id` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
   `payment_date` date DEFAULT NULL,
-  `status_id` varchar(51) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_id` tinyint(4) DEFAULT '0',
   `payment_amount` double DEFAULT '0',
   `discount_amount` double DEFAULT '0',
   `due_amount` double DEFAULT '0',
@@ -381,11 +379,11 @@ TRUNCATE TABLE `payments`;
 --
 
 INSERT INTO `payments` (`id`, `invoice_id`, `customer_id`, `payment_date`, `status_id`, `payment_amount`, `discount_amount`, `due_amount`, `total_amount`, `created_at`, `updated_at`) VALUES
-(1, 1000, 1, '2023-02-11', '1', 11625, 0, 0, 11625, '2023-02-11 16:50:02', '2023-02-11 16:50:02'),
-(2, 1001, 2, '2023-02-11', '1', 790, 10, 0, 790, '2023-02-11 16:52:59', '2023-02-11 16:52:59'),
-(3, 1002, 3, '2023-02-11', '1', 5240, 10, 0, 5240, '2023-02-11 16:54:03', '2023-02-11 16:54:03'),
-(4, 1003, 1, '2023-02-11', '3', 4000, 0, 200, 4200, '2023-02-11 16:55:32', '2023-02-11 16:57:05'),
-(5, 1004, 2, '2023-02-11', '1', 1000, 0, 0, 1000, '2023-02-11 17:00:16', '2023-02-11 17:00:16');
+(1, 1000, 1, '2023-02-11', 1, 11625, 0, 0, 11625, '2023-02-11 16:50:02', '2023-02-11 16:50:02'),
+(2, 1001, 2, '2023-02-11', 1, 790, 10, 0, 790, '2023-02-11 16:52:59', '2023-02-11 16:52:59'),
+(3, 1002, 3, '2023-02-11', 1, 5240, 10, 0, 5240, '2023-02-11 16:54:03', '2023-02-11 16:54:03'),
+(4, 1003, 1, '2023-02-11', 3, 4000, 0, 200, 4200, '2023-02-11 16:55:32', '2023-02-11 16:57:05'),
+(5, 1004, 2, '2023-02-11', 1, 1000, 0, 0, 1000, '2023-02-11 17:00:16', '2023-02-11 17:00:16');
 
 -- --------------------------------------------------------
 
@@ -586,18 +584,18 @@ TRUNCATE TABLE `purchase_orders`;
 --
 
 INSERT INTO `purchase_orders` (`id`, `po_number`, `po_date`, `po_description`, `product_id`, `supplier_id`, `category_id`, `purchase_qty`, `unit_price`, `purchase_price`, `status_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, '4044-HBC', '2023-02-11', '', 2, 3, 3, 40, 350, 14000, 1, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:49'),
-(2, '4044-HBC', '2023-02-11', '', 1, 2, 3, 40, 200, 8000, 1, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:53'),
-(3, '4044-HBC', '2023-02-11', '', 10, 1, 3, 20, 150, 3000, 1, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:58'),
-(4, '4044-HBC', '2023-02-11', '', 9, 1, 3, 20, 125, 2500, 1, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:42:01'),
-(5, '4045-HBC', '2023-02-11', '', 4, 6, 1, 25, 350, 8750, 1, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:05'),
-(6, '4045-HBC', '2023-02-11', '', 6, 5, 1, 25, 425, 10625, 1, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:09'),
-(7, '4045-HBC', '2023-02-11', '', 3, 4, 1, 25, 400, 10000, 1, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:11'),
-(8, '4046-HBC', '2023-02-11', '', 8, 7, 2, 20, 80, 1600, 1, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:14'),
-(9, '4046-HBC', '2023-02-11', '', 7, 7, 2, 20, 85, 1700, 1, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:19'),
-(10, '4046-HBC', '2023-02-11', '', 5, 6, 2, 20, 90, 1800, 1, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:27'),
-(11, '4047-HBC', '2023-02-11', '', 9, 1, 3, 10, 150, 1500, 0, 6, NULL, '2023-02-11 16:42:52', '2023-02-11 16:42:52'),
-(12, '4048-HBC', '2023-02-11', '', 1, 2, 3, 10, 150, 1500, 0, 6, NULL, '2023-02-11 16:43:14', '2023-02-11 16:43:14');
+(1, '4044-HBC', '2023-02-11', '', 2, 3, 3, 40, 350, 14000, 2, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:49'),
+(2, '4044-HBC', '2023-02-11', '', 1, 2, 3, 40, 200, 8000, 2, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:53'),
+(3, '4044-HBC', '2023-02-11', '', 10, 1, 3, 20, 150, 3000, 2, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:41:58'),
+(4, '4044-HBC', '2023-02-11', '', 9, 1, 3, 20, 125, 2500, 2, 6, NULL, '2023-02-11 16:39:30', '2023-02-11 16:42:01'),
+(5, '4045-HBC', '2023-02-11', '', 4, 6, 1, 25, 350, 8750, 2, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:05'),
+(6, '4045-HBC', '2023-02-11', '', 6, 5, 1, 25, 425, 10625, 2, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:09'),
+(7, '4045-HBC', '2023-02-11', '', 3, 4, 1, 25, 400, 10000, 2, 6, NULL, '2023-02-11 16:40:35', '2023-02-11 16:42:11'),
+(8, '4046-HBC', '2023-02-11', '', 8, 7, 2, 20, 80, 1600, 2, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:14'),
+(9, '4046-HBC', '2023-02-11', '', 7, 7, 2, 20, 85, 1700, 2, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:19'),
+(10, '4046-HBC', '2023-02-11', '', 5, 6, 2, 20, 90, 1800, 2, 6, NULL, '2023-02-11 16:41:23', '2023-02-11 16:42:27'),
+(11, '4047-HBC', '2023-02-11', '', 9, 1, 3, 10, 150, 1500, 1, 6, NULL, '2023-02-11 16:42:52', '2023-02-11 16:42:52'),
+(12, '4048-HBC', '2023-02-11', '', 1, 2, 3, 10, 150, 1500, 1, 6, NULL, '2023-02-11 16:43:14', '2023-02-11 16:43:14');
 
 -- --------------------------------------------------------
 
@@ -610,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `purchase_order_statuses` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `status` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Truncate table before insert `purchase_order_statuses`
@@ -622,9 +620,9 @@ TRUNCATE TABLE `purchase_order_statuses`;
 --
 
 INSERT INTO `purchase_order_statuses` (`id`, `status`) VALUES
-(0, 'Pending'),
-(1, 'Approved'),
-(2, 'Cancelled');
+(1, 'Pending'),
+(2, 'Approved'),
+(3, 'Cancelled');
 
 -- --------------------------------------------------------
 
@@ -754,7 +752,7 @@ TRUNCATE TABLE `users`;
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `username`, `profile_image`, `remember_token`, `created_at`, `updated_at`) VALUES
-(6, 'Test User', 'test@email.com', '2023-01-03 20:06:38', '$2y$10$jy.iahdZE0mq55hHErwuVe8LsWV9/0h0L/GDdWaNQ3eM.8.JNJaJS', 'testuser', '2023021110537274952.jpg', 'NyUCjwAjNRtEwhMOwfaRCgEwZDElmOhW846bAEUtxrV8yRFjqeAYp4lDAMQR', '2023-01-03 20:06:11', '2023-02-11 15:53:47');
+(1, 'Test User', 'test@email.com', '2023-01-03 20:06:38', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'testuser', '2023021110537274952.jpg', 'MAeg3M56ywETWdzT3OBpyor5dxGhTjl5AjLL8VC5KFQQkasxvZyJJX6aPnKa', '2023-01-03 20:06:11', '2023-02-11 15:53:47');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

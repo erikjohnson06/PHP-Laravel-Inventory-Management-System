@@ -51,17 +51,19 @@ Easy Inventory | Purchase Orders
 
                             <tbody>
 
+                                @if ($data)
+
                                 @foreach($data as $row)
 
                                 @php
                                 $rowClass = "";
-                                if ($row->status_id == 0){
+                                if ($row->status_id == 1){
                                 $rowClass = "onHold";
                                 }
-                                else if ($row->status_id == 1){
+                                else if ($row->status_id == 2){
                                 $rowClass = "approved";
                                 }
-                                else if ($row->status_id == 2){ //Cancelled
+                                else if ($row->status_id == 3){ //Cancelled
                                 $rowClass = "inactive";
                                 }
 
@@ -78,7 +80,7 @@ Easy Inventory | Purchase Orders
                                     <td>{{ $row['supplier']['name'] }}</td>
                                     <td>{{ $row['status']['status'] }}</td>
                                     <td>
-                                        @if ($row->status_id == 0)
+                                        @if ($row->status_id == 1)
                                         <a href="{{ route('purchaseorder.delete', $row->id) }}" class="btn btn-danger sm deleteItem" title="Delete">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
@@ -87,6 +89,7 @@ Easy Inventory | Purchase Orders
                                 </tr>
                                 @endforeach
 
+                                @endif
                             </tbody>
                         </table>
 

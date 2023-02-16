@@ -36,15 +36,14 @@ class DashboardController extends Controller
 
         $trailingSales = DB::table('invoices')
                 ->join('invoice_details', 'invoices.invoice_no','=','invoice_details.invoice_id')
-                ->where('invoices.status_id', 1)
+                ->where('invoices.status_id', 2)
                 ->where('invoices.invoice_date', '>=', $fromDate)
                 ->sum('invoice_details.sales_price');
 
         //# of Pending Purchase Orders
         $pendingPOs = DB::table('purchase_orders')
-                ->where('status_id', 0)
+                ->where('status_id', 1)
                 ->count();
-
 
         //Determine what quarter we are currently in
         $currDate = new DateTime;
@@ -59,7 +58,7 @@ class DashboardController extends Controller
         //Get sales from this quarter so far
         $quarterlySales = DB::table('invoices')
                 ->join('invoice_details', 'invoices.invoice_no','=','invoice_details.invoice_id')
-                ->where('invoices.status_id', 1)
+                ->where('invoices.status_id', 2)
                 ->where('invoices.invoice_date', '>=', $currentQtrStart->format("Y-m-d"))
                 ->where('invoices.invoice_date', '<=', $currentQtrEnd->format("Y-m-d"))
                 ->sum('invoice_details.sales_price');
@@ -67,7 +66,7 @@ class DashboardController extends Controller
         //Value of active products with approved purchased orders
         $currentInventoryValue = DB::table('purchase_orders')
                 ->join('products', 'products.id','=','purchase_orders.product_id')
-                ->where('purchase_orders.status_id', 1)
+                ->where('purchase_orders.status_id', 2)
                 ->whereIn('products.status_id', [1,2])
                 ->sum('purchase_price');
 

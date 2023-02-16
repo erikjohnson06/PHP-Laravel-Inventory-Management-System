@@ -28,11 +28,11 @@ class InvoiceController extends Controller {
      */
     public function viewInvoicesAll(): View {
 
-        //Status: 0 = Pending, 1 = Approved
+        //Status: 1 = Pending, 2 = Approved
 
         $data = Invoice::orderBy('invoice_date', 'DESC')
                 ->orderBy('id', 'DESC')
-                ->where("status_id", 1)
+                ->where("status_id", 2)
                 ->get();
 
         return view("modules.invoices.invoices_all", [
@@ -47,7 +47,7 @@ class InvoiceController extends Controller {
 
         $data = Invoice::orderBy('invoice_date', 'DESC')
                 ->orderBy('id', 'DESC')
-                ->where("status_id", 0)
+                ->where("status_id", 1)
                 ->get();
 
         return view("modules.invoices.invoices_pending", [
@@ -159,7 +159,7 @@ class InvoiceController extends Controller {
             $invoice->invoice_no = (int) $request->invoice_no;
             $invoice->invoice_date = (DateTime::createFromFormat("Y-m-d", $request->invoice_date))->format("Y-m-d");
             $invoice->comments = $request->comments;
-            $invoice->status_id = 0;
+            $invoice->status_id = 1;
             $invoice->created_by = Auth::user()->id;
             $invoice->created_at = Carbon::now();
 
@@ -177,7 +177,7 @@ class InvoiceController extends Controller {
                     $invoiceDetail->sales_qty = (int) $request->sales_qty[$i];
                     $invoiceDetail->unit_price = (float) $request->unit_price[$i];
                     $invoiceDetail->sales_price = (float) $request->sales_price[$i];
-                    $invoiceDetail->status_id = 0;
+                    $invoiceDetail->status_id = 1;
                     $invoiceDetail->save();
                 }
 
@@ -327,7 +327,7 @@ class InvoiceController extends Controller {
         }
 
         $invoice->updated_by = Auth::user()->id;
-        $invoice->status_id = 1;
+        $invoice->status_id = 2;
 
         DB::transaction(function () use ($request, $invoice, $id) {
 
@@ -336,7 +336,7 @@ class InvoiceController extends Controller {
                 $invoiceDetails = InvoiceDetail::where('id', $k)->first();
                 $product = Product::where("id", $invoiceDetails->product_id)->first();
 
-                $invoiceDetails->status_id = 1;
+                $invoiceDetails->status_id = 2;
                 $invoiceDetails->save();
 
                 $product->quantity = ((float) $product->quantity) - ((float) $val);
@@ -383,7 +383,7 @@ class InvoiceController extends Controller {
         }
 
         $data = Invoice::whereBetween("invoice_date", [$start_date->format("Y-m-d"), $end_date->format("Y-m-d")])
-                ->where("status_id", 1)
+                ->where("status_id", 2)
                 ->get();
 
         return view("modules.pdf.invoice_daily_report_pdf", [
